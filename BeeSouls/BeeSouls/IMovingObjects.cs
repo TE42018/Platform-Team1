@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BeeSouls
 {
-    interface IMovingObject
+    interface IMovingObjects
     {
         bool IsDead { get; set; }
         Vector2 Position { get; set; }
         Vector2 Velocity { get; set; }
-        
     }
 }
+
