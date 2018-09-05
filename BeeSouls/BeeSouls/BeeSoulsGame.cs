@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace BeeSouls
 {
@@ -11,7 +12,9 @@ namespace BeeSouls
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        Player player;
+        
+       
         public BeeSoulsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,8 +29,10 @@ namespace BeeSouls
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            player = new Player(this);
+            Components.Add(player);
 
+          
             base.Initialize();
         }
 
@@ -40,7 +45,7 @@ namespace BeeSouls
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            base.LoadContent();
         }
 
         /// <summary>
@@ -62,7 +67,8 @@ namespace BeeSouls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+          
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -75,7 +81,7 @@ namespace BeeSouls
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            player.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }
