@@ -14,6 +14,23 @@ namespace BeeSouls
         public int[,] Data { get; set; }
         public Texture2D TileMap { get; set; }
         public Vector2 CameraPosition { get; set; }
+        public float MaxZoom { get; set; }
+        public float MinZoom { get; set; }
+
+
+        private float zoom;
+        public float Zoom
+        {
+            get { return zoom; }
+            set
+            {
+                zoom = value;
+                if (zoom > MaxZoom)
+                    zoom = MaxZoom;
+                if (zoom < MinZoom)
+                    zoom = MinZoom;
+            }
+        }
 
         private int viewportWidth, viewportHeight;
 
@@ -21,6 +38,10 @@ namespace BeeSouls
         {
             viewportWidth = Game.GraphicsDevice.Viewport.Width;
             viewportHeight = Game.GraphicsDevice.Viewport.Height;
+
+            MaxZoom = 4.0f;
+            MinZoom = 0.5f;
+            MaxZoom = 1.0f;
 
             base.Initialize();
         }
@@ -36,14 +57,18 @@ namespace BeeSouls
             if (Data == null || TileMap == null)
                 return;
 
-            int screenCenterX = viewportWidth / 2;
-            int screenCenterY = viewportHeight / 2;
+            int screenCenterX = viewportWidth / 5;
+            int screenCenterY = viewportHeight / 5;
 
-            int startX = (int) ((CameraPosition.X - screenCenterX) / TileWidth);
-            int startY = (int) ((CameraPosition.Y - screenCenterY) / TileHeight);
+            float zoomTileWidth = (TileWidth * Zoom);
+            float zoomTileHeight = (TileHeight * Zoom);
+            Vector2 zoomCameraPosition = CameraPosition * Zoom;
 
-            int endX = (int) (startX + viewportWidth / TileWidth) + 1;
-            int endY = (int) (startY + viewportHeight / TileHeight) + 1;
+            int startX = (int) ((CameraPosition.X - screenCenterX) / zoomTileWidth);
+            int startY = (int) ((CameraPosition.Y - screenCenterY) / zoomTileHeight);
+
+            int endX = (int) (startX + viewportWidth / zoomTileWidth) + 1;
+            int endY = (int) (startY + viewportHeight / zoomTileHeight) + 1;
 
             if (startX < 0)
                 startX = 0;
@@ -57,15 +82,15 @@ namespace BeeSouls
             {
                 for (int x = startX; x < Data.GetLength(1) && x <= endX; x++)
                 {
-                    position.X = (x * TileWidth - CameraPosition.X + screenCenterX);
-                    position.Y = (y * TileHeight - CameraPosition.Y + screenCenterY);
+                    position.X = (x * zoomTileWidth - zoomCameraPosition.X + screenCenterX);
+                    position.Y = (y * zoomTileHeight - zoomCameraPosition.Y + screenCenterY);
 
                     int index = Data[y, x];
                     Rectangle tileGfx = new Rectangle((index % tilesPerLine) * TileWidth,
                         (index / tilesPerLine) * TileHeight, TileWidth, TileHeight);
 
                     spriteBatch.Draw(TileMap,
-                        position, tileGfx, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+                        position, tileGfx, Color.White, 0f, Vector2.Zero,zoom, SpriteEffects.None, 0f);
 
                 }
             }
