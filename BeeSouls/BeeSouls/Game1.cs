@@ -14,19 +14,19 @@ namespace BeeSouls
         SpriteBatch spriteBatch;
         TileEngine tileEngine;
 
-
         MouseState mouseState, previousMouseState;
         KeyboardState ks;
         Color col;
 
-        const byte MENU = 0, PLAYGAME = 1, GAMEOVER = 2, HIGHSCORE = 3, OPTIONS = 4;
+        const byte MENU = 0, PLAYGAME = 1, GAMEOVER = 2, HIGHSCORE = 3, OPTIONS = 4, EXIT = 5;
         int CurrentScreen = MENU;
 
         //Variables for the MENU Screen
-        Texture2D highscoreText, optionText, playgameText;
-        Button playGameButton, optionsButton, highscoreButton;
+        Texture2D highscoreText, optionText, playgameText,exitText;
+        Button playGameButton, optionsButton, highscoreButton,exitButton;
         float screenwidth, screenheight;
         Texture2D bgimage;
+
 
         public Game1()
         {
@@ -34,6 +34,14 @@ namespace BeeSouls
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
+            graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+            graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+        }
+        void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            e.GraphicsDeviceInformation.PresentationParameters.BackBufferFormat = SurfaceFormat.Color;
+            e.GraphicsDeviceInformation.PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
         }
 
         protected override void Initialize()
@@ -61,7 +69,7 @@ namespace BeeSouls
                 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
 
-
+            
 
             base.Initialize();
         }
@@ -84,8 +92,11 @@ namespace BeeSouls
             highscoreText = Content.Load<Texture2D>("highscores");
             optionText = Content.Load<Texture2D>("options");
             playgameText = Content.Load<Texture2D>("PlayGame");
+            exitText = Content.Load<Texture2D>("exit");
             bgimage = Content.Load<Texture2D>("main menu");
 
+            exitButton = new Button(new Rectangle(300, 400, exitText.Width, exitText.Height), true);
+            exitButton.load(Content, "exit");
             highscoreButton = new Button(new Rectangle(300, 300, highscoreText.Width, highscoreText.Height), true);
             highscoreButton.load(Content, "highscores");
 
@@ -128,10 +139,6 @@ namespace BeeSouls
                 tileEngine.CameraPosition += new Vector2(-5.0f, 0);
             if (state.IsKeyDown(Keys.Right))
                 tileEngine.CameraPosition += new Vector2(5.0f, 0);
-            if (state.IsKeyDown(Keys.PageDown))
-                tileEngine.Zoom += 0.05f;
-            if (state.IsKeyDown(Keys.PageUp))
-                tileEngine.Zoom -= 0.05f;
 
             switch (CurrentScreen)
             {
@@ -141,6 +148,13 @@ namespace BeeSouls
                     if (playGameButton.update(new Vector2(mouseState.X, mouseState.Y)) == true && mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
                     {
                         CurrentScreen = PLAYGAME;
+                        tileEngine.CameraPosition = new Vector2(950,1000);
+
+                    }
+                    else
+                    {
+                        tileEngine.CameraPosition = new Vector2(-5550, -5550);
+
                     }
 
                     //GO TO OPTIONS SCREEN
@@ -155,6 +169,13 @@ namespace BeeSouls
                         CurrentScreen = HIGHSCORE;
                     }
 
+
+                    if (exitButton.update(new Vector2(mouseState.X, mouseState.Y)) == true && mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        CurrentScreen = EXIT;
+                        Exit();
+                    }
+
                     break;
 
                 case OPTIONS:
@@ -162,6 +183,8 @@ namespace BeeSouls
                     if (ks.IsKeyDown(Keys.Escape))
                     {
                         CurrentScreen = MENU;
+                        tileEngine.CameraPosition += new Vector2(-2000, -2000);
+
                     }
                     break;
 
@@ -169,6 +192,7 @@ namespace BeeSouls
                     if (ks.IsKeyDown(Keys.Escape))
                     {
                         CurrentScreen = MENU;
+                        tileEngine.CameraPosition += new Vector2(-2000, -2000);
                     }
                     break;
 
@@ -179,6 +203,15 @@ namespace BeeSouls
                     if (ks.IsKeyDown(Keys.Escape))
                     {
                         CurrentScreen = MENU;
+                        tileEngine.CameraPosition += new Vector2(-2000, -2000);
+                    }
+                    break;
+                case EXIT:
+                    //What we want to happen when we play our GAME goes in here.
+                    if (ks.IsKeyDown(Keys.Escape))
+                    {
+                        CurrentScreen = MENU;
+                        tileEngine.CameraPosition += new Vector2(-2000, -2000);
                     }
                     break;
 
@@ -189,8 +222,9 @@ namespace BeeSouls
 
 
             }
-            previousMouseState = mouseState;
             base.Update(gameTime);
+         
+
         }
 
         /// <summary>
@@ -202,7 +236,7 @@ namespace BeeSouls
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
             switch (CurrentScreen)
             {
                 case MENU:
@@ -211,6 +245,7 @@ namespace BeeSouls
                     spriteBatch.Draw(playgameText, new Rectangle(300, 100, playgameText.Width, playgameText.Height), Color.White);
                     spriteBatch.Draw(optionText, new Rectangle(300, 200, optionText.Width, optionText.Height), Color.White);
                     spriteBatch.Draw(highscoreText, new Rectangle(300, 300, highscoreText.Width, highscoreText.Height), Color.White);
+                    spriteBatch.Draw(exitText, new Rectangle(300, 400, exitText.Width, exitText.Height), Color.White);
                     // spriteBatch.Draw(bgimage, new Rectangle(800, 420, bgimage.Width, bgimage.Height), Color.White);
                     break;
 
@@ -225,16 +260,19 @@ namespace BeeSouls
 
                 case PLAYGAME:
                     //What we want to happen when we play our GAME goes in here.
-                    spriteBatch.Draw(playgameText, new Rectangle(300, 100, playgameText.Width, playgameText.Height), Color.White);
-                    spriteBatch.Draw(playgameText, new Rectangle(300, 200, playgameText.Width, playgameText.Height), Color.White);
-                    spriteBatch.Draw(playgameText, new Rectangle(300, 300, playgameText.Width, playgameText.Height), Color.White);
+
+                    break;
+                case EXIT:
+                    //What we want to happen when we play our GAME goes in here.
+
                     break;
 
                 case GAMEOVER:
                     //What we want to happen when our GAME is OVER goes in here.
                     break;
-
+                   
             }
+
             tileEngine.Draw(gameTime, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
