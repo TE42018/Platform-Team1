@@ -23,10 +23,13 @@ namespace BeeSouls
         private Texture2D playerFlyTexture;
         private Texture2D playerLeftTexture;
         private Texture2D playerLeftFlyTexture;
+        private Texture2D playerHitLeftTexture;  
+        private Texture2D playerHitTexture; 
 
         private int wingFlapMult = 35;
-
-
+        private int playerHealth = 100;
+        Rectangle playerHitBox, tempHitBox;
+        bool IsPlayerHit = false;
         float timeSinceLastSprite = 0f;
     
    
@@ -45,9 +48,14 @@ namespace BeeSouls
                        
 
             Position += Velocity;
-          
 
+            playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
             
+            if (playerHitBox.Intersects(tempHitBox))
+            {
+                playerHealth -= 10;
+                IsPlayerHit = true;
+            }
 
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.W) || state.IsKeyDown(Keys.Up))
@@ -79,19 +87,34 @@ namespace BeeSouls
             }
 
             Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
-            if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0) //Fly
+            if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0) //Flying
             {
                 if (Velocity.X >= 0)
                     currentTexture = playerFlyTexture;
                 else
                     currentTexture = playerLeftFlyTexture;
             }
+           
             else //Normal
             {
                 if (Velocity.X >= 0)
+                {
                     currentTexture = playerTexture;
+                    if(IsPlayerHit == true)
+                    {
+                        currentTexture = playerHitTexture;
+                        IsPlayerHit = false;
+                    }
+                }
                 else
+                {
                     currentTexture = playerLeftTexture;
+                    if(IsPlayerHit == true)
+                    {
+                        currentTexture = playerHitLeftTexture;
+                        IsPlayerHit = false;
+                    }
+                }
             }
 
 
@@ -109,6 +132,8 @@ namespace BeeSouls
             playerFlyTexture = Game.Content.Load<Texture2D>("player/bee_flyRight");
             playerLeftTexture = Game.Content.Load<Texture2D>("player/bee");
             playerLeftFlyTexture = Game.Content.Load<Texture2D>("player/bee_fly");
+            playerHitTexture = Game.Content.Load<Texture2D>("player/bee_HitRight");
+            playerHitLeftTexture = Game.Content.Load<Texture2D>("player/bee_Hit");
 
             currentTexture = playerFlyTexture;
 
@@ -117,42 +142,11 @@ namespace BeeSouls
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
+       
 
             spriteBatch.Draw(currentTexture, new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height), Color.White);
-            //if (Velocity.X >= 0)
-            //{
-            //    //spriteBatch.Draw(playerTexture, Position, Color.White);
-                
-            //    if (timeSinceLastSprite > 0.5f)
-            //    {
-            //        spriteBatch.Draw(playerFlyTexture, Position, Color.White);
-            //        timeSinceLastSprite = 0f;
-            //    }
-            //    else
-            //    {
-            //        spriteBatch.Draw(playerTexture, Position, Color.White);
-            //    }
-            //}
-            //else if(Velocity.X < 0)
-            //{
-            //    spriteBatch.Draw(playerLeftTexture, Position, Color.White);
-
-            //    if (timeSinceLastSprite > .5f)
-            //    {
-            //        spriteBatch.Draw(playerLeftFlyTexture, Position, Color.White);
-            //        timeSinceLastSprite = 0f;
-            //    }
-            //    else
-            //    {
-            //        spriteBatch.Draw(playerTexture, Position, Color.White);
-            //    }
-            //}
-
-          
             
-            spriteBatch.End();
+          
         }
     }
 }

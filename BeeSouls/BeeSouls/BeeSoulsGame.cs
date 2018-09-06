@@ -79,11 +79,14 @@ namespace BeeSouls
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             player.Draw(spriteBatch);
 
+            spriteBatch.End();
             base.Draw(gameTime);
+
         }
     }
 }
