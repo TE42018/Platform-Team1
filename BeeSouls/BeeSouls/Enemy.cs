@@ -23,11 +23,13 @@ namespace BeeSouls
         public EnemyType Type { get; private set; }
         public int EnemyDamage { get; set; }
         public Texture2D EnemyGraphics{ get; set; }
-
-        public Enemy(EnemyType type, Texture2D enemyGraphics, int EnemyDamage, Vector2 _Position)
+        public int Points { get; set; }
+        
+        public Enemy(EnemyType type, Texture2D enemyGraphics, int EnemyDamage, Vector2 _Position, int Points, Vector2 _Velocity)
         {
             Type = type;
             Position = _Position;
+            Velocity = _Velocity;
             
             EnemyGraphics = enemyGraphics;
             switch (Type)
