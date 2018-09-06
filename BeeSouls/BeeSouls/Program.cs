@@ -14,6 +14,10 @@ namespace BeeSouls
         [STAThread]
         static void Main()
         {
+            var tmp = ScoreManager.LoadScore();
+            tmp.AddScore("tst", 1222);
+            tmp.SaveScores();
+
             using (var game = new Game1())
                 game.Run();
         }

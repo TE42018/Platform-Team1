@@ -58,15 +58,15 @@ namespace BeeSouls
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,8,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
+                {0,0,0,0,0,0,0,0,0,0,0,7,8,0,0,0,0,0,0,7,8,0,0,0,0,0,0,0,0,0,0,0,0,0,7,8,0,0,0,0,0,0},
+                {0,0,0,7,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,8,0,0,0,0,0,0,0,0,0,0,0,4},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
+                {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
+                {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
 
             
@@ -91,7 +91,7 @@ namespace BeeSouls
             //Things we want to load in the MENU screen.
             highscoreText = Content.Load<Texture2D>("highscores");
             optionText = Content.Load<Texture2D>("options");
-            playgameText = Content.Load<Texture2D>("PlayGame");
+            playgameText = Content.Load<Texture2D>("btnPlay");
             exitText = Content.Load<Texture2D>("exit");
             bgimage = Content.Load<Texture2D>("main menu");
 
@@ -104,7 +104,7 @@ namespace BeeSouls
             optionsButton.load(Content, "options");
 
             playGameButton = new Button(new Rectangle(300, 100, playgameText.Width, playgameText.Height), true);
-            playGameButton.load(Content, "PlayGame");
+            playGameButton.load(Content, "btnPlay");
 
         }
 
@@ -131,14 +131,7 @@ namespace BeeSouls
             ks = Keyboard.GetState();
 
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Down))
-                tileEngine.CameraPosition += new Vector2(0, 5.0f);
-            if (state.IsKeyDown(Keys.Up))
-                tileEngine.CameraPosition += new Vector2(0, -5.0f);
-            if (state.IsKeyDown(Keys.Left))
-                tileEngine.CameraPosition += new Vector2(-5.0f, 0);
-            if (state.IsKeyDown(Keys.Right))
-                tileEngine.CameraPosition += new Vector2(5.0f, 0);
+
 
             switch (CurrentScreen)
             {
@@ -153,10 +146,9 @@ namespace BeeSouls
                     }
                     else
                     {
-                        tileEngine.CameraPosition = new Vector2(-5550, -5550);
+                        tileEngine.CameraPosition = new Vector2(-5500, -5500);
 
                     }
-
                     //GO TO OPTIONS SCREEN
                     if (optionsButton.update(new Vector2(mouseState.X, mouseState.Y)) == true && mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
                     {
@@ -199,6 +191,17 @@ namespace BeeSouls
 
 
                 case PLAYGAME:
+
+                    if (state.IsKeyDown(Keys.Down))
+                        tileEngine.CameraPosition += new Vector2(0, 5.0f);
+                    if (state.IsKeyDown(Keys.Up))
+                        tileEngine.CameraPosition += new Vector2(0, -5.0f);
+                    if (state.IsKeyDown(Keys.Left))
+                        tileEngine.CameraPosition += new Vector2(-5.0f, 0);
+                    if (state.IsKeyDown(Keys.Right))
+                        tileEngine.CameraPosition += new Vector2(5.0f, 0);
+
+
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {
@@ -236,7 +239,9 @@ namespace BeeSouls
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, null);
+            spriteBatch.Begin();
+
+            tileEngine.Draw(gameTime, spriteBatch);
             switch (CurrentScreen)
             {
                 case MENU:
@@ -251,7 +256,9 @@ namespace BeeSouls
 
                 case OPTIONS:
                     //Whatever Options you want to DISPLAY
+                    spriteBatch.Draw(optionText, new Rectangle(300, 100, optionText.Width, optionText.Height), Color.White);
                     spriteBatch.Draw(optionText, new Rectangle(300, 200, optionText.Width, optionText.Height), Color.White);
+                    spriteBatch.Draw(optionText, new Rectangle(300, 300, optionText.Width, optionText.Height), Color.White);
                     break;
 
                 case HIGHSCORE:
@@ -273,7 +280,7 @@ namespace BeeSouls
                    
             }
 
-            tileEngine.Draw(gameTime, spriteBatch);
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

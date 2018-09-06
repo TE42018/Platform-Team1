@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace BeeSouls
 {
-    class MenuState
+    public class Score
     {
+        public string PlayerName { get; set; }
+        
+        public int Value { get; set; }
     }
 }

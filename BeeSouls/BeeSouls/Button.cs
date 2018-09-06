@@ -11,8 +11,11 @@ namespace BeeSouls
         bool clicked;
         bool available;
         Texture2D image;
+        private SpriteFont _font;
+        private Texture2D _texture;
+        public Color PenColour { get; set; }
 
-
+        public string Text;
         //Constructor
         public Button()
         {
@@ -21,6 +24,14 @@ namespace BeeSouls
             available = true;
         }
 
+        public Button(Texture2D texture, SpriteFont font)
+        {
+            _texture = texture;
+
+            _font = font;
+
+            PenColour = Color.Black;
+        }
         //OverLoaded Constructor
         public Button(Rectangle rec, bool avail)
         {
@@ -55,7 +66,9 @@ namespace BeeSouls
 
             return clicked;
 
+
         }
+
 
         //Draw
         public void draw(SpriteBatch sp)
