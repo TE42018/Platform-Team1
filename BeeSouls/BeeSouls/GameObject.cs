@@ -12,5 +12,6 @@ namespace BeeSouls
        public bool IsDead { get; set; }
        public Vector2 Position { get; set; }
        public Vector2 Velocity { get; set; }
+       public bool isVisible { get; set; }
     }
 }
