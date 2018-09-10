@@ -9,7 +9,7 @@ namespace BeeSouls
 {
     interface IMovingObjects
     {
-        bool IsDead { get; set; }
+
         Vector2 Position { get; set; }
         Vector2 Velocity { get; set; }
     }
