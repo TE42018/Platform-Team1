@@ -13,7 +13,7 @@ namespace BeeSouls
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player player;
-        
+        PlayerAttack bullet;
        
         public BeeSoulsGame()
         {
@@ -32,6 +32,8 @@ namespace BeeSouls
             player = new Player(this);
             Components.Add(player);
 
+            bullet = new PlayerAttack(this);
+            Components.Add(bullet);
           
             base.Initialize();
         }
@@ -69,7 +71,7 @@ namespace BeeSouls
 
           
             player.Update(gameTime);
-
+           
             base.Update(gameTime);
         }
 
@@ -83,7 +85,7 @@ namespace BeeSouls
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             player.Draw(spriteBatch);
-
+          
             spriteBatch.End();
             base.Draw(gameTime);
 

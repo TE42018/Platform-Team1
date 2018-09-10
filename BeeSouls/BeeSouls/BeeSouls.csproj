@@ -44,6 +44,7 @@
     <Compile Include="BeeSoulsGame.cs" />
     <Compile Include="IMovingObjects.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerAttack.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
