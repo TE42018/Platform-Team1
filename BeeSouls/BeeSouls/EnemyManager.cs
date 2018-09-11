@@ -101,7 +101,7 @@ namespace BeeSouls
                     !FlyHitBox.Intersects(SnakeHitBox) || !FlyHitBox.Intersects(SpiderHitBox) || !FlyHitBox.Intersects(SnailHitBox) || !FlyHitBox.Intersects(WormHitBox) || !FlyHitBox.Intersects(FlyHitBox))
                 {
                     //ground enemies
-                    _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(500, 500), 20, new Vector2(-2, 0)));
+                    _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(950, 1000), 20, new Vector2(-2, 0)));
                     _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[1], 20, new Vector2(400, 500), 25, new Vector2(-3, 0)));
                     _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[2], 20, new Vector2(300, 500), 10, new Vector2(-1, 0)));
                     _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(200, 500), 10, new Vector2(-1, 0)));

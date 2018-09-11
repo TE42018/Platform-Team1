@@ -14,15 +14,11 @@ namespace BeeSouls
         [STAThread]
         static void Main()
         {
-<<<<<<< HEAD
-            using (var game = new BeeSoulsGame())
-=======
             var tmp = ScoreManager.LoadScore();
             tmp.AddScore("tst", 1222);
             tmp.SaveScores();
 
-            using (var game = new Game1())
->>>>>>> background
+            using (var game = new BeeSoulsGame())
                 game.Run();
         }
     }

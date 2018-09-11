@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/highscores.png</SourceFile>
-  <SourceTime>2018-09-06T15:05:48.0539459+02:00</SourceTime>
+  <SourceTime>2018-09-10T09:06:57.9618153+02:00</SourceTime>
   <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/highscores.xnb</DestFile>
-  <DestTime>2018-09-06T15:07:41.9293436+02:00</DestTime>
+  <DestTime>2018-09-11T12:38:08.6889114+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

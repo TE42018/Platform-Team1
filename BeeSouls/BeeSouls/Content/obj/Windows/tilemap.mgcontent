@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/TileMap.png</SourceFile>
-  <SourceTime>2018-09-06T15:05:48.0898495+02:00</SourceTime>
-  <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/TileMap.xnb</DestFile>
-  <DestTime>2018-09-06T15:07:42.0648037+02:00</DestTime>
+  <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/tilemap.png</SourceFile>
+  <SourceTime>2018-09-10T09:06:57.984754+02:00</SourceTime>
+  <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/tilemap.xnb</DestFile>
+  <DestTime>2018-09-11T12:38:08.7906722+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
