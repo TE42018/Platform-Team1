@@ -138,13 +138,6 @@ namespace BeeSouls
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.P))
-                Exit();
             //Checking the state of our mouse.
             mouseState = Mouse.GetState();
             ks = Keyboard.GetState();
@@ -217,7 +210,9 @@ namespace BeeSouls
 
 
                 case PLAYGAME:
-
+                    tileEngine.CameraPosition = player.Position;
+                    enemyManager.Update(gameTime);
+                    player.Update(gameTime);
                     if (state.IsKeyDown(Keys.Down))
                         player.Position += new Vector2(0, 5.0f);
                     if (state.IsKeyDown(Keys.Up))
@@ -226,6 +221,7 @@ namespace BeeSouls
                         player.Position += new Vector2(-5.0f, 0);
                     if (state.IsKeyDown(Keys.Right))
                         player.Position += new Vector2(5.0f, 0);
+
 
 
                     //What we want to happen when we play our GAME goes in here.
@@ -250,12 +246,11 @@ namespace BeeSouls
                     //What we want to happen when our GAME is OVER goes in here.
                     break;
 
-                    // TODO: Add your update logic here
-                    enemyManager.Update(gameTime);
-                    player.Update(gameTime);
 
                     base.Update(gameTime);
+
             }
+
         }
 
         /// <summary>

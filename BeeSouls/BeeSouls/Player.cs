@@ -58,7 +58,7 @@ namespace BeeSouls
 
             var attacking = PlayerAttack.IsAttacking;
 
-            Position += Velocity;
+            //Position += Velocity;
 
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
             
@@ -208,7 +208,7 @@ namespace BeeSouls
         {
        
 
-            spriteBatch.Draw(currentTexture, new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height), Color.White);
+            spriteBatch.Draw(currentTexture, new Rectangle(300, 250, currentTexture.Width, currentTexture.Height), Color.White);
             
           
         }
