@@ -42,17 +42,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BeeSoulsGame.cs" />
-<<<<<<< HEAD
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="EnemyShot.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="IMovingObjects.cs" />
-=======
-    <Compile Include="IMovingObjects.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerAttack.cs" />
->>>>>>> Player
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

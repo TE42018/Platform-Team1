@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-<<<<<<< HEAD
 using System.Collections.Generic;
-=======
->>>>>>> Player
 using System.Diagnostics;
 
 namespace BeeSouls
@@ -16,14 +13,11 @@ namespace BeeSouls
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-<<<<<<< HEAD
         EnemyManager enemyManager;
-        
-=======
+
         Player player;
         PlayerAttack bullet;
-       
->>>>>>> Player
+
         public BeeSoulsGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -56,13 +50,10 @@ namespace BeeSouls
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-<<<<<<< HEAD
             enemyManager.Loadcontent(Content);
             // TODO: use this.Content to load your game content here
-=======
 
             base.LoadContent();
->>>>>>> Player
         }
 
         /// <summary>
@@ -84,14 +75,10 @@ namespace BeeSouls
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-<<<<<<< HEAD
             // TODO: Add your update logic here
             enemyManager.Update(gameTime);
-=======
-          
             player.Update(gameTime);
-           
->>>>>>> Player
+
             base.Update(gameTime);
         }
 
@@ -103,18 +90,10 @@ namespace BeeSouls
         {
             spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
-<<<<<<< HEAD
-            spriteBatch.Begin();
             enemyManager.Draw(spriteBatch);
-            spriteBatch.End();
-            // TODO: Add your drawing code here
 
-=======
-
-            player.Draw(spriteBatch);
-          
+            player.Draw(spriteBatch);         
             spriteBatch.End();
->>>>>>> Player
             base.Draw(gameTime);
 
         }
