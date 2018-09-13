@@ -100,14 +100,14 @@ namespace BeeSouls
                     !WormHitBox.Intersects(SnakeHitBox) || !WormHitBox.Intersects(SpiderHitBox) || !WormHitBox.Intersects(SnailHitBox) || !WormHitBox.Intersects(WormHitBox) || !WormHitBox.Intersects(FlyHitBox) ||
                     !FlyHitBox.Intersects(SnakeHitBox) || !FlyHitBox.Intersects(SpiderHitBox) || !FlyHitBox.Intersects(SnailHitBox) || !FlyHitBox.Intersects(WormHitBox) || !FlyHitBox.Intersects(FlyHitBox))
                 {
-                    //ground enemies
+                  /*  //ground enemies
                     _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(950, 1000), 20, new Vector2(-2, 0)));
                     _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[1], 20, new Vector2(400, 500), 25, new Vector2(-3, 0)));
                     _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[2], 20, new Vector2(300, 500), 10, new Vector2(-1, 0)));
                     _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(200, 500), 10, new Vector2(-1, 0)));
                     //air enemies
                     _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(100, 100), 20, new Vector2(0, 0)));
-                    Debug.WriteLine("ny enemy spawnades");
+                    Debug.WriteLine("ny enemy spawnades");*/
                 }
             }
 

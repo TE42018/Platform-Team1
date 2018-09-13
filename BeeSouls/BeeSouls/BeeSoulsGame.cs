@@ -221,9 +221,9 @@ namespace BeeSouls
                         player.Position += new Vector2(-5.0f, 0);
                     if (state.IsKeyDown(Keys.Right))
                         player.Position += new Vector2(5.0f, 0);
-
-
-
+                    var min = new Vector2(400, 240);
+                    var max = new Vector2(2940, 1050);
+                    player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {

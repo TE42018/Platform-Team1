@@ -14,8 +14,10 @@ namespace BeeSouls
         public int[,] Data { get; set; }
         public Texture2D TileMap { get; set; }
         public Vector2 CameraPosition { get; set; }
+        public Vector2 min;
+        public Vector2 max;
 
-
+        public static Vector2 CameraOffset { get; set; }
 
         private int viewportWidth, viewportHeight;
 
@@ -39,9 +41,14 @@ namespace BeeSouls
             if (Data == null || TileMap == null)
                 return;
 
-            int screenCenterX = viewportWidth / 1;
-            int screenCenterY = viewportHeight / 1;
+            int screenCenterX = viewportWidth / 2;
+            int screenCenterY = viewportHeight / 2;
+            min = new Vector2(screenCenterX, screenCenterY);
+            max = new Vector2(2940 - screenCenterX, 1050 - screenCenterY); 
 
+
+            CameraPosition = Vector2.Clamp(CameraPosition, min, max);
+            CameraOffset = new Vector2(-CameraPosition.X + screenCenterX, -CameraPosition.Y + screenCenterY);
 
             int startX = (int) ((CameraPosition.X - screenCenterX) / TileWidth);
             int startY = (int) ((CameraPosition.Y - screenCenterY) / TileHeight);
@@ -67,6 +74,10 @@ namespace BeeSouls
                     int index = Data[y, x];
                     Rectangle tileGfx = new Rectangle((index % tilesPerLine) * TileWidth,
                         (index / tilesPerLine) * TileHeight, TileWidth, TileHeight);
+
+                    //tiles.Add(new Tile(position, tileTex));
+
+                    //hitboxes.Add(new Rectangle(position.ToPoint(), TileWidth, TileHeight);
 
                     spriteBatch.Draw(TileMap,
                         position, tileGfx, Color.White, 0f, Vector2.Zero,1.0f, SpriteEffects.None, 0f);
