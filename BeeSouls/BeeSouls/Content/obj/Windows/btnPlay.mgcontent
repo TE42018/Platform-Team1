@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/btnPlay.png</SourceFile>
-  <SourceTime>2018-09-10T09:06:57.9578264+02:00</SourceTime>
-  <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/btnPlay.xnb</DestFile>
-  <DestTime>2018-09-11T12:38:08.6161057+02:00</DestTime>
+  <SourceFile>C:/Users/Rikard.Larsson1/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/btnPlay.png</SourceFile>
+  <SourceTime>2018-09-11T11:37:14.027799+02:00</SourceTime>
+  <DestFile>C:/Users/Rikard.Larsson1/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/btnPlay.xnb</DestFile>
+  <DestTime>2018-09-11T13:06:48.221397+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/Enemy/snail_walk.png</SourceFile>
-  <SourceTime>2018-09-10T09:06:45.0034994+02:00</SourceTime>
-  <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/Enemy/snail_walk.xnb</DestFile>
-  <DestTime>2018-09-11T12:38:08.9908111+02:00</DestTime>
+  <SourceFile>C:/Users/Rikard.Larsson1/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/Enemy/snail_walk.png</SourceFile>
+  <SourceTime>2018-09-10T08:48:42.1867852+02:00</SourceTime>
+  <DestFile>C:/Users/Rikard.Larsson1/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/Enemy/snail_walk.xnb</DestFile>
+  <DestTime>2018-09-11T13:06:48.7749216+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

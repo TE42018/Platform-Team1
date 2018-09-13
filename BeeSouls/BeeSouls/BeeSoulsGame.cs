@@ -1,4 +1,3 @@
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,11 +15,13 @@ namespace BeeSouls
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         EnemyManager enemyManager;
+        EnemyShot enemyShot;
+        Texture2D shottexture;
         TileEngine tileEngine;
 
         Player player;
         PlayerAttack bullet;
-
+       
 
         MouseState mouseState, previousMouseState;
         KeyboardState ks;
@@ -30,8 +31,8 @@ namespace BeeSouls
         int CurrentScreen = MENU;
 
         //Variables for the MENU Screen
-        Texture2D highscoreText, optionText, playgameText, exitText;
-        Button playGameButton, optionsButton, highscoreButton, exitButton;
+        Texture2D highscoreText, optionText, playgameText, exitText, resumeText;
+        Button playGameButton, optionsButton, highscoreButton, exitButton, resumeButton;
         float screenwidth, screenheight;
         Texture2D bgimage;
 
@@ -57,13 +58,14 @@ namespace BeeSouls
         /// </summary>
         protected override void Initialize()
         {
+            
             col = Color.White;
             screenheight = graphics.GraphicsDevice.Viewport.Height;
             screenwidth = graphics.GraphicsDevice.Viewport.Width;
             tileEngine.TileHeight = 70;
             tileEngine.TileWidth = 70;
             tileEngine.Data = new int[,]
-            {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},//2940
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -77,13 +79,12 @@ namespace BeeSouls
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
-                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
+                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
+            };
             player = new Player(this);
             Components.Add(player);
-
             bullet = new PlayerAttack(this);
             Components.Add(bullet);
-          
             base.Initialize();
         }
         internal void ChangeState(MenuState menuState)
@@ -100,11 +101,13 @@ namespace BeeSouls
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             enemyManager.Loadcontent(Content);
+            enemyShot.Loadcontent(Content);
             tileEngine.TileMap = Content.Load<Texture2D>("tilemap");
             //Things we want to load in the MENU screen.
             highscoreText = Content.Load<Texture2D>("highscores");
             optionText = Content.Load<Texture2D>("options");
             playgameText = Content.Load<Texture2D>("btnPlay");
+            resumeText = Content.Load<Texture2D>("btnResume");
             exitText = Content.Load<Texture2D>("exit");
             bgimage = Content.Load<Texture2D>("main menu");
 
@@ -113,12 +116,16 @@ namespace BeeSouls
             highscoreButton = new Button(new Rectangle(300, 300, highscoreText.Width, highscoreText.Height), true);
             highscoreButton.load(Content, "highscores");
 
+            resumeButton = new Button(new Rectangle(300, 100, playgameText.Width, playgameText.Height), true);
+            resumeButton.load(Content, "btnResume");
+
             optionsButton = new Button(new Rectangle(300, 200, optionText.Width, optionText.Height), true);
             optionsButton.load(Content, "options");
 
             playGameButton = new Button(new Rectangle(300, 100, playgameText.Width, playgameText.Height), true);
             playGameButton.load(Content, "btnPlay");
 
+            
             base.LoadContent();
         }
 
@@ -150,18 +157,19 @@ namespace BeeSouls
                 case MENU:
                     //What we want to happen in the MENU screen goes in here.
                     //GO TO PLAYGAME SCREEN
-                    if (playGameButton.update(new Vector2(mouseState.X, mouseState.Y)) == true &&
-                        mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
-                    {
-                        CurrentScreen = PLAYGAME;
-                        tileEngine.CameraPosition = new Vector2(player.Position.X, player.Position.Y);
+                   
+                        if (playGameButton.update(new Vector2(mouseState.X, mouseState.Y)) == true &&
+                            mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
+                        {
+                            CurrentScreen = PLAYGAME;
+                            tileEngine.CameraPosition = new Vector2(player.Position.X, player.Position.Y);
+                            
+                        }
+                        else
+                        {
+                            tileEngine.CameraPosition = new Vector2(-5500, -5500);
 
-                    }
-                    else
-                    {
-                        tileEngine.CameraPosition = new Vector2(-5500, -5500);
-
-                    }
+                        }                    
 
                     //GO TO OPTIONS SCREEN
                     if (optionsButton.update(new Vector2(mouseState.X, mouseState.Y)) == true &&
@@ -210,7 +218,9 @@ namespace BeeSouls
 
 
                 case PLAYGAME:
+
                     tileEngine.CameraPosition = player.Position;
+                    enemyShot.Update(gameTime);
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     if (state.IsKeyDown(Keys.Down))
@@ -247,10 +257,14 @@ namespace BeeSouls
                     break;
 
 
+                    // TODO: Add your update logic here
+
+
+
                     base.Update(gameTime);
 
             }
-
+            
         }
 
         /// <summary>
@@ -261,7 +275,7 @@ namespace BeeSouls
         {
             spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
+            enemyShot.Draw(spriteBatch);
             tileEngine.Draw(gameTime, spriteBatch);
             enemyManager.Draw(spriteBatch);
             switch (CurrentScreen)
