@@ -20,7 +20,7 @@ namespace BeeSouls
 
         public void AddScore(string name, int val)
         {
-            Scores.Add(new Score() { PlayerName = name, Value = val});
+            //Scores.Add(new Score() { PlayerName = name, Value = val});
         }
 
         public void SaveScores()

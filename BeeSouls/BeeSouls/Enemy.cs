@@ -24,14 +24,16 @@ namespace BeeSouls
         public int EnemyDamage { get; set; }
         public Texture2D EnemyGraphics{ get; set; }
         public int Points { get; set; }
+        public Rectangle Hitbox { get; set; }
         
         public Enemy(EnemyType type, Texture2D enemyGraphics, int EnemyDamage, Vector2 _Position, int Points, Vector2 _Velocity)
         {
             Type = type;
             Position = _Position;
+            EnemyGraphics = enemyGraphics;
+            Hitbox = new Rectangle(Position.ToPoint(), new Point(EnemyGraphics.Width, EnemyGraphics.Height));
             Velocity = _Velocity;
             
-            EnemyGraphics = enemyGraphics;
             switch (Type)
             {
                 //case EnemyType.worm:
@@ -63,7 +65,8 @@ namespace BeeSouls
         }
         public void Update(GameTime gameTime)
         {
-           
+            Position += Velocity;
+            Hitbox = new Rectangle(Position.ToPoint(), new Point(EnemyGraphics.Width, EnemyGraphics.Height));
         }
 
         public void Draw(SpriteBatch spritebatch)

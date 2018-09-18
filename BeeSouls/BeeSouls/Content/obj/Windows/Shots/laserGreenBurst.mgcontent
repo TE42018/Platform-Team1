@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/Shots/laserGreenBurst.png</SourceFile>
-  <SourceTime>2018-09-10T09:06:45.0306132+02:00</SourceTime>
-  <DestFile>C:/Users/alban.shala/Documents/git/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/Shots/laserGreenBurst.xnb</DestFile>
-  <DestTime>2018-09-11T12:38:09.1373861+02:00</DestTime>
+  <SourceFile>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/Shots/laserGreenBurst.png</SourceFile>
+  <SourceTime>2018-09-10T09:11:48.5517729+02:00</SourceTime>
+  <DestFile>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/bin/Windows/Shots/laserGreenBurst.xnb</DestFile>
+  <DestTime>2018-09-13T11:27:23.2693324+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

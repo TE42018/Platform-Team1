@@ -27,6 +27,8 @@ namespace BeeSouls
         private Texture2D playerHitTexture;
         private Texture2D playerAttackTexture;
         private Texture2D playerAttackLeftTexture;
+        private Texture2D playerDeadTexture;
+        private Texture2D playerDeadRightTexture;
 
         private int direction = 1;
         private int wingFlapMult = 35;
@@ -37,11 +39,13 @@ namespace BeeSouls
         {
             get { return playerHitBox; }
         }
-        private Rectangle tempHitBox;
+        
 
         bool IsPlayerHit = false;
+        
         float timeSinceLastSprite = 0f;
-        private float attackCounter = 0f; 
+        private float attackCounter = 0f;
+        private float timeSinceLastHit = 0f;
 
         private KeyboardState currKeyboardState;
         private KeyboardState prevKeyboardState;
@@ -53,7 +57,7 @@ namespace BeeSouls
             prevKeyboardState = currKeyboardState;
         }
 
-        
+
 
 
         public override void Update(GameTime gameTime)
@@ -68,57 +72,92 @@ namespace BeeSouls
             //Position += Velocity;
 
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
+
+            Console.WriteLine(playerHealth);
+            for (int i = 0; i < EnemyManager.enemylist.Count; i++)
+            {
+                Rectangle enemyBox = EnemyManager.enemylist[i].Hitbox;
+                if (playerHitBox.Intersects(enemyBox))
+                {
+                 
+                    IsPlayerHit = true;
+                    EnemyManager.enemylist.RemoveAt(i);
+
+                }
+            }
+
+           
             
 
-            if (playerHitBox.Intersects(tempHitBox))
+            if (IsDead == false)
             {
-                playerHealth -= 10;
-                IsPlayerHit = true;
-            }
+                if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
+                {
+                    Velocity = new Vector2(0, -2.0f);
+
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
+                {
+
+                    Velocity = new Vector2(0, 2.0f);
 
 
-            if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
-            {
-                Velocity = new Vector2(0, -2.0f);
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
+                {
+                    Velocity = new Vector2(-2.0f, 0);
+                    direction = -1;
 
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
-            {
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
+                {
+                    Velocity = new Vector2(2.0f, 0);
+                    direction = 1;
 
-                Velocity = new Vector2(0, 2.0f);
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
+                {
+                        Velocity = new Vector2(0, -2.0f);
+
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
+                {
+
+                    Velocity = new Vector2(0, 2.0f);
 
 
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
-            {
-                Velocity = new Vector2(-2.0f, 0);
-                direction = -1;
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
+                {
+                    Velocity = new Vector2(-2.0f, 0);
+                    direction = -1;
 
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
-            {
-                Velocity = new Vector2(2.0f, 0);
-                direction = 1;
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
+                {
+                    Velocity = new Vector2(2.0f, 0);
+                    direction = 1;
 
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
-            {
+                }
+                else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !attacking )
+                {
 
-               
+                    attacking = true;
 
-                PlayerAttack.IsAttacking = true;
-
-                
+                }
+                else
+                {
+                    Velocity = new Vector2(0, 0);
+                }
             }
             else
             {
                 Velocity = new Vector2(0, 0);
             }
 
-            
 
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
-            if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0) //Flying
+            if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
             {
                 if (direction > 0)
                 {
@@ -130,43 +169,63 @@ namespace BeeSouls
                     currentTexture = playerLeftFlyTexture;
                 }
             }
-           
             else //Normal
             {
                 if (direction > 0)
                 {
                     currentTexture = playerTexture;
-                    if(IsPlayerHit == true)
+                    if (IsPlayerHit == true)
                     {
                         currentTexture = playerHitTexture;
                         IsPlayerHit = false;
+                    }
+                    else if (IsDead == true)
+                    {
+                        currentTexture = playerDeadRightTexture;
+                        Velocity = new Vector2(0, 0);
                     }
                 }
                 else
                 {
                     currentTexture = playerLeftTexture;
-                    if(IsPlayerHit == true)
+                    if (IsPlayerHit == true)
                     {
                         currentTexture = playerHitLeftTexture;
                         IsPlayerHit = false;
+
+                    }
+                    else if (IsDead == true)
+                    {
+                        currentTexture = playerDeadTexture;
+                        Velocity = new Vector2(0, 0);
                     }
                 }
             }
-           
-            //Console.WriteLine(PlayerAttack.IsAttacking);
+
+        
+
+            if (playerHealth <= 0)
+            {
+                IsDead = true;
+            }
+            else
+            {
+                IsDead = false;
+            }
+            
            
 
-            if (PlayerAttack.IsAttacking  == true)
+            if (attacking == true)
             {
                 attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                Console.WriteLine(attackCounter);
+                
                 Velocity = new Vector2(0, 0);
 
 
-                if (attackCounter > 300)
+                if (attackCounter > 200)
                 {
-                  
-                    PlayerAttack.IsAttacking = false;
+
+                    attacking = false;
                     attackCounter = 0;
                 }
                 else
@@ -174,12 +233,12 @@ namespace BeeSouls
                     if (direction > 0)
                     {
                         currentTexture = playerAttackTexture;
-                        PlayerAttack.IsAttacking = false;
+                       
                     }
                     else
                     {
                         currentTexture = playerAttackLeftTexture;
-                        PlayerAttack.IsAttacking = false;
+
                     }
 
                 }
@@ -188,7 +247,7 @@ namespace BeeSouls
 
             }
 
-            base.Update(gameTime);
+            base.Update(gameTime);     
         }
 
         
@@ -204,6 +263,8 @@ namespace BeeSouls
             playerHitLeftTexture = Game.Content.Load<Texture2D>("player/bee_Hit");
             playerAttackTexture = Game.Content.Load<Texture2D>("player/bee_attack");
             playerAttackLeftTexture = Game.Content.Load<Texture2D>("player/bee_attackLeft");
+            playerDeadTexture = Game.Content.Load<Texture2D>("player/bee_dead");
+            playerDeadRightTexture = Game.Content.Load<Texture2D>("player/bee_deadRight");
 
 
             currentTexture = playerFlyTexture;
