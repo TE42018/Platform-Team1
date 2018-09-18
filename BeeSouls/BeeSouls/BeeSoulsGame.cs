@@ -65,7 +65,7 @@ namespace BeeSouls
             tileEngine.TileHeight = 70;
             tileEngine.TileWidth = 70;
             tileEngine.Data = new int[,]
-            {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},//2940
+            {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -79,8 +79,7 @@ namespace BeeSouls
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
-                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
-            };
+                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
             player = new Player(this);
             Components.Add(player);
             bullet = new PlayerAttack(this);
@@ -231,9 +230,10 @@ namespace BeeSouls
                         player.Position += new Vector2(-5.0f, 0);
                     if (state.IsKeyDown(Keys.Right))
                         player.Position += new Vector2(5.0f, 0);
-
-
-
+                    var min = new Vector2(400, 240);
+                    var max = new Vector2(2940, 1050);
+                    player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
+                    Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {
@@ -317,10 +317,15 @@ namespace BeeSouls
             }
 
 
-            player.Draw(spriteBatch);         
+            player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
 
         }
     }
 }
+
+            tileEngine.MapData = new int[,]
+            {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
+            tileEngine.GenerateHitboxes();

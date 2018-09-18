@@ -31,7 +31,14 @@ namespace BeeSouls
         private int direction = 1;
         private int wingFlapMult = 35;
         private int playerHealth = 100;
-        private Rectangle playerHitBox, tempHitBox;
+        private Rectangle playerHitBox;
+
+        public Rectangle PlayerHitBox
+        {
+            get { return playerHitBox; }
+        }
+        private Rectangle tempHitBox;
+
         bool IsPlayerHit = false;
         float timeSinceLastSprite = 0f;
         private float attackCounter = 0f; 
@@ -46,7 +53,10 @@ namespace BeeSouls
             prevKeyboardState = currKeyboardState;
         }
 
-        
+        public void Collide(Rectangle[] hitboxes)
+        {
+
+        }
 
 
         public override void Update(GameTime gameTime)
@@ -57,12 +67,9 @@ namespace BeeSouls
             currKeyboardState = Keyboard.GetState();
 
             var attacking = PlayerAttack.IsAttacking;
-
-            //Position += Velocity;
-
+            
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
             
-
             if (playerHitBox.Intersects(tempHitBox))
             {
                 playerHealth -= 10;
@@ -206,11 +213,9 @@ namespace BeeSouls
 
         public void Draw(SpriteBatch spriteBatch)
         {
-       
-
-            spriteBatch.Draw(currentTexture, new Rectangle(300, 250, currentTexture.Width, currentTexture.Height), Color.White);
-            
-          
+            var i = (int) (Position.X + TileEngine.CameraOffset.X);
+            var i1 = (int) (Position.Y + TileEngine.CameraOffset.Y);
+            spriteBatch.Draw(currentTexture, new Rectangle(i, i1, currentTexture.Width, currentTexture.Height), Color.White);
         }
     }
 }
