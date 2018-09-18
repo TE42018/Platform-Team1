@@ -34,30 +34,30 @@ namespace BeeSouls
             EnemyGraphics = enemyGraphics;
             switch (Type)
             {
-                //case EnemyType.worm:
-                //    Position = new Vector2(0, 0);
-                //    EnemyGraphics = enemy/worm;
-                //    EnemyDamage = 1;
+                //case enemytype.worm:
+                //    position = new vector2(0, 0);
+                //    enemygraphics = enemy/worm;
+                //    enemydamage = 1;
                 //    break;
-                //case EnemyType.fly:
-                //    Position = new Vector2(0, 0);
-                //    EnemyGraphics = "enemy/fly";
-                //    EnemyDamage = 1;
+                //case enemytype.fly:
+                //    position = new vector2(0, 0);
+                //    enemygraphics = "enemy/fly";
+                //    enemydamage = 1;
                 //    break;
-                //case EnemyType.snail:
-                //    Position = new Vector2(0, 0);
-                //    EnemyGraphics = "enemy/snail";
-                //    EnemyDamage = 1;
+                //case enemytype.snail:
+                //    position = new vector2(0, 0);
+                //    enemygraphics = "enemy/snail";
+                //    enemydamage = 1;
                 //    break;
-                //case EnemyType.spider:
-                //    Position = new Vector2(0, 0);
-                //    EnemyGraphics = "enemy/spider";
-                //    EnemyDamage = 1;
+                //case enemytype.spider:
+                //    position = new vector2(0, 0);
+                //    enemygraphics = "enemy/spider";
+                //    enemydamage = 1;
                 //    break;
-                //case EnemyType.bat:
-                //    Position = new Vector2(0, 0);
-                //    EnemyGraphics = "enemy/bat";
-                //    EnemyDamage = 1;
+                //case enemytype.bat:
+                //    position = new vector2(0, 0);
+                //    enemygraphics = "enemy/bat";
+                //    enemydamage = 1;
                 //    break;
             }
         }

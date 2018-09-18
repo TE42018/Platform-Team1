@@ -17,13 +17,17 @@ namespace BeeSouls
         public int EnemyCount { get; set; }
         public int MaxEnemies { get; set; }
         public int SpawnCounter = 0;
+        private int EnemywingFlapMult = 35;
         public float SpawnInterval { get; set; }
+        private int currentTexture;
+        private Texture2D flyMoveTexture, SnakeMoveTexture, WormMoveTexture, SnailMoveTexture;
         private Rectangle SnakeHitBox, SnailHitBox, SpiderHitBox, WormHitBox, FlyHitBox;
         
         private List<Texture2D> _texturesGround;
         private List<Texture2D> _texturesAir;
         
         List<Enemy> enemylist = new List<Enemy>();
+     
         public EnemyManager(ContentManager content)
         {
             EnemyCount = 5;
@@ -34,6 +38,7 @@ namespace BeeSouls
         }
         public void Loadcontent(ContentManager Content)
         {
+            flyMoveTexture = Content.Load<Texture2D>("enemy/fly_fly");
             _texturesGround = new List<Texture2D>()
             {
             Content.Load<Texture2D>("enemy/snake"),
@@ -44,9 +49,11 @@ namespace BeeSouls
             
             _texturesAir = new List<Texture2D>()
             { 
-            Content.Load<Texture2D>("enemy/fly"),
+                Content.Load<Texture2D>("enemy/fly"),
+                Content.Load<Texture2D>("enemy/fly_fly")
             };
             enemylist = CreateEnemies(EnemyCount);
+            currentTexture = 0;
         }
         public void Update(GameTime gameTime)
         {
@@ -66,13 +73,29 @@ namespace BeeSouls
             FlyHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
             // lägg till tid på spawncounter
             SpawnCounter += gameTime.ElapsedGameTime.Milliseconds;
-            
+
+            if (Math.Sin(EnemywingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0) //Flying
+            {
+                
+                    currentTexture = 1;
+                    
+                    Debug.WriteLine(currentTexture);
+               
+            }
+
+            else
+            {
+                
+                    currentTexture = 0;
+                    Debug.WriteLine(currentTexture);
+                
+            }
             //Kolla om spawncounter >= spawninterval
             //Om det är det, spawna en fiende och sätt spawncounter till noll
             if (SpawnCounter >= SpawnInterval && EnemyCount < MaxEnemies)     
             {
-                    
-                    
+
+
                     
                   
             }
@@ -80,7 +103,7 @@ namespace BeeSouls
             {
                 ee.Position += ee.Velocity;
             }
-          //  Debug.WriteLine(EnemyCount);
+            //  Debug.WriteLine(EnemyCount);
            
         }
         
@@ -91,7 +114,7 @@ namespace BeeSouls
 
             //_enemylist.Add(new Enemy(EnemyType.bat, _textures[enemyrandom.Next(0, 5)], 20, new Vector2(enemyrandom.Next(0, 200), enemyrandom.Next(0, 200))));
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 1; i++)
             {
                 //ground enemies
                 if ( !SnakeHitBox.Intersects(SnakeHitBox) || !SnakeHitBox.Intersects(SpiderHitBox) || !SnakeHitBox.Intersects(SnailHitBox) || !SnakeHitBox.Intersects(WormHitBox) || !SnakeHitBox.Intersects(FlyHitBox))
@@ -113,21 +136,23 @@ namespace BeeSouls
                 //air enemies
                 if (!FlyHitBox.Intersects(SnakeHitBox) || !FlyHitBox.Intersects(SpiderHitBox) || !FlyHitBox.Intersects(SnailHitBox) || !FlyHitBox.Intersects(WormHitBox) || !FlyHitBox.Intersects(FlyHitBox))
                 {
-                _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(100, 100), 20, new Vector2(0, 0)));
+                    _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[currentTexture], 20, new Vector2(100, 100), 20, new Vector2(0, 0)));
                 Debug.WriteLine("ny enemy spawnades");
                 }
             }
-
+            Debug.WriteLine(currentTexture);
             return _enemyList;
+             
         }
         
-        public void Draw(SpriteBatch spritebatch)
+        public void Draw(SpriteBatch spritebatch, GameTime gameTime)
         {
             foreach (Enemy e in enemylist)
             {
                 e.Draw(spritebatch);
 
             }
+            
         }
     }
 }

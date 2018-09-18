@@ -35,6 +35,7 @@ namespace BeeSouls
         }
         public void Update(GameTime gameTime)
         {
+            ShotTexture = _texturesShot[0];
             Position += Velocity;
             shoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (shoot > 1)

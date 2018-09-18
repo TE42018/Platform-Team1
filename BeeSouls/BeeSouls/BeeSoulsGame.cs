@@ -101,7 +101,7 @@ namespace BeeSouls
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             enemyManager.Loadcontent(Content);
-            enemyShot.Loadcontent(Content);
+            //enemyShot.Loadcontent(Content);
             tileEngine.TileMap = Content.Load<Texture2D>("tilemap");
             //Things we want to load in the MENU screen.
             highscoreText = Content.Load<Texture2D>("highscores");
@@ -220,7 +220,7 @@ namespace BeeSouls
                 case PLAYGAME:
 
                     tileEngine.CameraPosition = player.Position;
-                    enemyShot.Update(gameTime);
+                    //enemyShot.Update(gameTime);
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     if (state.IsKeyDown(Keys.Down))
@@ -275,9 +275,9 @@ namespace BeeSouls
         {
             spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            enemyShot.Draw(spriteBatch);
+            //enemyShot.Draw(spriteBatch);
             tileEngine.Draw(gameTime, spriteBatch);
-            enemyManager.Draw(spriteBatch);
+            enemyManager.Draw(spriteBatch, gameTime);
             switch (CurrentScreen)
             {
                 case MENU:
