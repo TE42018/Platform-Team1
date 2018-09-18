@@ -53,7 +53,10 @@ namespace BeeSouls
             prevKeyboardState = currKeyboardState;
         }
 
-        
+        public void Collide(Rectangle[] hitboxes)
+        {
+
+        }
 
 
         public override void Update(GameTime gameTime)
@@ -64,12 +67,9 @@ namespace BeeSouls
             currKeyboardState = Keyboard.GetState();
 
             var attacking = PlayerAttack.IsAttacking;
-
-            //Position += Velocity;
-
+            
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
             
-
             if (playerHitBox.Intersects(tempHitBox))
             {
                 playerHealth -= 10;
