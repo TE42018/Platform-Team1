@@ -38,11 +38,6 @@ namespace BeeSouls
             Hitboxes = new List<Rectangle>();
         }
 
-        //public void GetHitboxes(Vector2 pos, Vector2 size)
-        //{
-
-        //}
-
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (MapData == null || TileMap == null)
@@ -63,10 +58,6 @@ namespace BeeSouls
             int endX = (int) (startX + viewportWidth / TileWidth) + 1;
             int endY = (int) (startY + viewportHeight / TileHeight) + 1;
 
-            //startX = startY = 0;
-            //endX = startX + 10;
-            //endY = startY + 10;
-
             if (startX < 0)
                 startX = 0;
             if (startY < 0)
@@ -86,10 +77,6 @@ namespace BeeSouls
                     Rectangle tileGfx = new Rectangle((index % tilesPerLine) * TileWidth,
                         (index / tilesPerLine) * TileHeight, TileWidth, TileHeight);
 
-                    //tiles.Add(new Tile(position, tileTex));
-
-                    //hitboxes.Add(new Rectangle(position.ToPoint(), TileWidth, TileHeight);
-
                     spriteBatch.Draw(TileMap,
                         position, tileGfx, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 
@@ -103,19 +90,18 @@ namespace BeeSouls
             int startY = (int) ((hitBox.Top) / TileHeight);
 
             int endX = (int) (hitBox.Right / TileWidth);
-            int endY = (int) (hitBox.Bottom / TileHeight);
+            int endY = (int) (hitBox.Bottom / TileHeight); 
 
             var rect = Rectangle.Empty;
 
-            for (int y = startY; y <= endY; y++)
+            for (int y = startY; y < MapData.GetLength(0) && y <= endY; y++)
             {
-                for (int x = startX; x <= endX; x++)
+                for (int x = startX; x < MapData.GetLength(1) && x <= endX; x++)
                 {
-                    if (MapData[y, x] == 2 || MapData[y, x] == 1)
+                    if (MapData[y, x] == 2 || MapData[y, x] == 1 || MapData[y, x] == 3 || MapData[y, x] == 4)
                     {
                         var tmp = new Rectangle(x*TileWidth, y*TileHeight, TileWidth, TileHeight);
                         var intersect = Intersection(hitBox, tmp);
-
                         return intersect;
                     }
                 }

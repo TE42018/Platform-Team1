@@ -227,11 +227,13 @@ namespace BeeSouls
                     {
                         player.Position += new Vector2(-5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                        player.direction = -1;
                     }
                     if (state.IsKeyDown(Keys.Right))
                     {
                         player.Position += new Vector2(5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                        player.direction = 1;
                     }
 
                     var min = new Vector2(400, 240);

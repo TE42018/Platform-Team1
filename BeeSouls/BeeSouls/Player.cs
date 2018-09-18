@@ -38,7 +38,7 @@ namespace BeeSouls
         private Texture2D playerAttackTexture;
         private Texture2D playerAttackLeftTexture;
 
-        private int direction = 1;
+        public int direction = 1;
         private int wingFlapMult = 35;
         private int playerHealth = 100;
         private Rectangle playerHitBox;
@@ -60,8 +60,6 @@ namespace BeeSouls
         public Player(Game game) : base(game)
         {
             Position = new Vector2(50, 50);
-            currKeyboardState = Keyboard.GetState();
-            prevKeyboardState = currKeyboardState;
         }
 
         public void Collide(Rectangle overlap, string direction)
@@ -106,35 +104,10 @@ namespace BeeSouls
                 IsPlayerHit = true;
             }
 
-
-            if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
-            {
-                Velocity = new Vector2(0, -2.0f);
-
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
-            {
-
-                Velocity = new Vector2(0, 2.0f);
-
-
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
-            {
-                Velocity = new Vector2(-2.0f, 0);
-                direction = -1;
-
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
-            {
-                Velocity = new Vector2(2.0f, 0);
-                direction = 1;
-
-            }
             else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
             {
 
-               
+              
 
                 PlayerAttack.IsAttacking = true;
 
@@ -145,8 +118,7 @@ namespace BeeSouls
                 Velocity = new Vector2(0, 0);
             }
 
-            
-
+           
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
             if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0) //Flying
             {
