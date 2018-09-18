@@ -78,7 +78,6 @@ namespace BeeSouls
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
-            tileEngine.GenerateHitboxes();
             player = new Player(this);
             Components.Add(player);
 
@@ -215,17 +214,34 @@ namespace BeeSouls
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     if (state.IsKeyDown(Keys.Down))
+                    {
                         player.Position += new Vector2(0, 5.0f);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                    }
                     if (state.IsKeyDown(Keys.Up))
+                    {
                         player.Position += new Vector2(0, -5.0f);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                    }
                     if (state.IsKeyDown(Keys.Left))
+                    {
                         player.Position += new Vector2(-5.0f, 0);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                    }
                     if (state.IsKeyDown(Keys.Right))
+                    {
                         player.Position += new Vector2(5.0f, 0);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                    }
+
                     var min = new Vector2(400, 240);
                     var max = new Vector2(2940, 1050);
                     player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
-                    Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
+
+                    var result = tileEngine.CheckCollision(player.PlayerHitBox);
+
+
+
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {

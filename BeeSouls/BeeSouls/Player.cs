@@ -14,7 +14,17 @@ namespace BeeSouls
     class Player : DrawableGameComponent, IMovingObjects
     {
         public bool IsDead { get; set; }
-        public Vector2 Position { get; set; }
+
+        public Vector2 Position
+        {
+            get => _position;
+            set
+            {
+                _position = value;
+                playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, 60, 40);
+            } 
+        }
+
         public Vector2 Velocity { get; set; }
 
         //Variables for the graphic
@@ -45,6 +55,7 @@ namespace BeeSouls
 
         private KeyboardState currKeyboardState;
         private KeyboardState prevKeyboardState;
+        private Vector2 _position;
 
         public Player(Game game) : base(game)
         {
@@ -53,9 +64,28 @@ namespace BeeSouls
             prevKeyboardState = currKeyboardState;
         }
 
-        public void Collide(Rectangle[] hitboxes)
+        public void Collide(Rectangle overlap, string direction)
         {
+            if (overlap == Rectangle.Empty)
+                return;
 
+            //if (overlap.Width > overlap.Height)
+            if (direction == "height")
+            {
+                //justera höjdled
+                if (PlayerHitBox.Center.Y > overlap.Center.Y)
+                    Position = new Vector2(Position.X, overlap.Bottom + 1);
+                else
+                   Position = new Vector2(Position.X, overlap.Top - PlayerHitBox.Height - 1);
+            }
+            if(direction == "width")
+            {
+                //justera sidled
+                if (PlayerHitBox.Center.X > overlap.Center.X)
+                    Position = Position + new Vector2(overlap.Width, 0);
+                else
+                    Position = Position + new Vector2(-overlap.Width - 1, 0);
+            }
         }
 
 
