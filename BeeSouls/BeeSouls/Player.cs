@@ -22,7 +22,7 @@ namespace BeeSouls
             {
                 _position = value;
                 playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, 60, 40);
-            } 
+            }
         }
 
         public Vector2 Velocity { get; set; }
@@ -33,7 +33,7 @@ namespace BeeSouls
         private Texture2D playerFlyTexture;
         private Texture2D playerLeftTexture;
         private Texture2D playerLeftFlyTexture;
-        private Texture2D playerHitLeftTexture;  
+        private Texture2D playerHitLeftTexture;
         private Texture2D playerHitTexture;
         private Texture2D playerAttackTexture;
         private Texture2D playerAttackLeftTexture;
@@ -49,10 +49,10 @@ namespace BeeSouls
         {
             get { return playerHitBox; }
         }
-        
+
 
         bool IsPlayerHit = false;
-        
+
         float timeSinceLastSprite = 0f;
         private float attackCounter = 0f;
         private float timeSinceLastHit = 0f;
@@ -69,24 +69,34 @@ namespace BeeSouls
         public void Collide(Rectangle overlap, string direction)
         {
             if (overlap == Rectangle.Empty)
+            {
                 return;
+            }
 
             //if (overlap.Width > overlap.Height)
             if (direction == "height")
             {
                 //justera höjdled
                 if (PlayerHitBox.Center.Y > overlap.Center.Y)
+                {
                     Position = new Vector2(Position.X, overlap.Bottom + 1);
+                }
                 else
-                   Position = new Vector2(Position.X, overlap.Top - PlayerHitBox.Height - 1);
+                {
+                    Position = new Vector2(Position.X, overlap.Top - PlayerHitBox.Height - 1);
+                }
             }
-            if(direction == "width")
+            if (direction == "width")
             {
                 //justera sidled
                 if (PlayerHitBox.Center.X > overlap.Center.X)
+                {
                     Position = Position + new Vector2(overlap.Width, 0);
+                }
                 else
+                {
                     Position = Position + new Vector2(-overlap.Width - 1, 0);
+                }
             }
         }
 
@@ -99,26 +109,27 @@ namespace BeeSouls
             currKeyboardState = Keyboard.GetState();
 
             var attacking = PlayerAttack.IsAttacking;
-            
+
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
 
             Console.WriteLine(playerHealth);
+
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {
                 Rectangle enemyBox = EnemyManager.enemylist[i].Hitbox;
                 if (playerHitBox.Intersects(enemyBox))
                 {
-                 
+
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
 
                 }
-            }
 
-            else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
-            {
 
-               
+                else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
+                {
+
+
 
                     Velocity = new Vector2(0, 2.0f);
 
@@ -136,7 +147,7 @@ namespace BeeSouls
                     direction = 1;
 
                 }
-                else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !attacking )
+                else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !attacking)
                 {
 
                     attacking = true;
@@ -146,109 +157,108 @@ namespace BeeSouls
                 {
                     Velocity = new Vector2(0, 0);
                 }
-            }
-            else
-            {
-                Velocity = new Vector2(0, 0);
-            }
-
-            
-
-            //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
-            if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
-            {
-                if (direction > 0)
-                {
-                    currentTexture = playerFlyTexture;
-
-                }
-                else
-                {
-                    currentTexture = playerLeftFlyTexture;
-                }
-            }
-            else //Normal
-            {
-                if (direction > 0)
-                {
-                    currentTexture = playerTexture;
-                    if (IsPlayerHit == true)
-                    {
-                        currentTexture = playerHitTexture;
-                        IsPlayerHit = false;
-                    }
-                    else if (IsDead == true)
-                    {
-                        currentTexture = playerDeadRightTexture;
-                        Velocity = new Vector2(0, 0);
-                    }
-                }
-                else
-                {
-                    currentTexture = playerLeftTexture;
-                    if (IsPlayerHit == true)
-                    {
-                        currentTexture = playerHitLeftTexture;
-                        IsPlayerHit = false;
-
-                    }
-                    else if (IsDead == true)
-                    {
-                        currentTexture = playerDeadTexture;
-                        Velocity = new Vector2(0, 0);
-                    }
-                }
-            }
-
-        
-
-            if (playerHealth <= 0)
-            {
-                IsDead = true;
-            }
-            else
-            {
-                IsDead = false;
-            }
-            
-           
-
-            if (attacking == true)
-            {
-                attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                
-                Velocity = new Vector2(0, 0);
 
 
-                if (attackCounter > 200)
-                {
 
-                    attacking = false;
-                    attackCounter = 0;
-                }
-                else
+
+
+
+                //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
+                if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
                 {
                     if (direction > 0)
                     {
-                        currentTexture = playerAttackTexture;
-                       
+                        currentTexture = playerFlyTexture;
+
                     }
                     else
                     {
-                        currentTexture = playerAttackLeftTexture;
-
+                        currentTexture = playerLeftFlyTexture;
                     }
+                }
+                else //Normal
+                {
+                    if (direction > 0)
+                    {
+                        currentTexture = playerTexture;
+                        if (IsPlayerHit == true)
+                        {
+                            currentTexture = playerHitTexture;
+                            IsPlayerHit = false;
+                        }
+                        else if (IsDead == true)
+                        {
+                            currentTexture = playerDeadRightTexture;
+                            Velocity = new Vector2(0, 0);
+                        }
+                    }
+                    else
+                    {
+                        currentTexture = playerLeftTexture;
+                        if (IsPlayerHit == true)
+                        {
+                            currentTexture = playerHitLeftTexture;
+                            IsPlayerHit = false;
 
+                        }
+                        else if (IsDead == true)
+                        {
+                            currentTexture = playerDeadTexture;
+                            Velocity = new Vector2(0, 0);
+                        }
+                    }
                 }
 
 
 
-            }
+                if (playerHealth <= 0)
+                {
+                    IsDead = true;
+                }
+                else
+                {
+                    IsDead = false;
+                }
 
-            base.Update(gameTime);     
+
+
+                if (attacking == true)
+                {
+                    attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                    Velocity = new Vector2(0, 0);
+
+
+                    if (attackCounter > 200)
+                    {
+
+                        attacking = false;
+                        attackCounter = 0;
+                    }
+                    else
+                    {
+                        if (direction > 0)
+                        {
+                            currentTexture = playerAttackTexture;
+
+                        }
+                        else
+                        {
+                            currentTexture = playerAttackLeftTexture;
+
+                        }
+
+                    }
+
+
+
+                }
+
+                base.Update(gameTime);
+            }
         }
 
-        
+
 
         protected override void LoadContent()
         {
@@ -272,9 +282,10 @@ namespace BeeSouls
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var i = (int) (Position.X + TileEngine.CameraOffset.X);
-            var i1 = (int) (Position.Y + TileEngine.CameraOffset.Y);
+            var i = (int)(Position.X + TileEngine.CameraOffset.X);
+            var i1 = (int)(Position.Y + TileEngine.CameraOffset.Y);
             spriteBatch.Draw(currentTexture, new Rectangle(i, i1, currentTexture.Width, currentTexture.Height), Color.White);
-        }
-    }
+        } 
+    } 
 }
+ 

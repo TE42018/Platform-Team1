@@ -242,7 +242,7 @@ namespace BeeSouls
                     var min = new Vector2(400, 240);
                     var max = new Vector2(2940, 1050);
                     player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
-                    Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
+                   // Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {
@@ -331,8 +331,8 @@ namespace BeeSouls
 }
 
 
-                    var result = tileEngine.CheckCollision(player.PlayerHitBox);
+                    //var result = tileEngine.CheckCollision(player.PlayerHitBox);
 
 
 
-                    //Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
+                    ////Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
