@@ -38,41 +38,6 @@ namespace BeeSouls
             Hitboxes = new List<Rectangle>();
         }
 
-        public void GenerateHitboxes()
-        {
-            for (int x = 0; x < MapData.GetLength(0); x++)
-            {
-                for (int y = 0; y < MapData.GetLength(1); y++)
-                {
-                    int id = MapData[x, y];
-
-                    if (id == 1 || id == 2)
-                    {
-                        Rectangle hitbox = new Rectangle(y * TileWidth, x * TileHeight, TileWidth, TileHeight);
-                        Hitboxes.Add(hitbox);
-                    }
-                }
-            }
-            Console.WriteLine(Hitboxes);
-        }
-
-        public List<Rectangle> GetHitboxes(Rectangle rect)
-        {
-            List<Rectangle> hitboxesResult = new List<Rectangle>();
-            foreach (Rectangle hitbox in Hitboxes)
-            {
-                if (rect.Intersects(hitbox))
-                    hitboxesResult.Add((hitbox));
-            }
-
-            return hitboxesResult;
-        }
-
-        //public void GetHitboxes(Vector2 pos, Vector2 size)
-        //{
-
-        //}
-
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (MapData == null || TileMap == null)
@@ -81,7 +46,7 @@ namespace BeeSouls
             int screenCenterX = viewportWidth / 2;
             int screenCenterY = viewportHeight / 2;
             min = new Vector2(screenCenterX, screenCenterY);
-            max = new Vector2(2940 - screenCenterX, 1050 - screenCenterY); 
+            max = new Vector2(2940 - screenCenterX, 1050 - screenCenterY);
 
 
             CameraPosition = Vector2.Clamp(CameraPosition, min, max);
@@ -92,10 +57,6 @@ namespace BeeSouls
 
             int endX = (int) (startX + viewportWidth / TileWidth) + 1;
             int endY = (int) (startY + viewportHeight / TileHeight) + 1;
-
-            //startX = startY = 0;
-            //endX = startX + 10;
-            //endY = startY + 10;
 
             if (startX < 0)
                 startX = 0;
@@ -116,15 +77,51 @@ namespace BeeSouls
                     Rectangle tileGfx = new Rectangle((index % tilesPerLine) * TileWidth,
                         (index / tilesPerLine) * TileHeight, TileWidth, TileHeight);
 
-                    //tiles.Add(new Tile(position, tileTex));
-
-                    //hitboxes.Add(new Rectangle(position.ToPoint(), TileWidth, TileHeight);
-
                     spriteBatch.Draw(TileMap,
-                        position, tileGfx, Color.White, 0f, Vector2.Zero,1.0f, SpriteEffects.None, 0f);
+                        position, tileGfx, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
 
                 }
             }
+        }
+
+        public Rectangle CheckCollision(Rectangle hitBox)
+        {
+            int startX = (int) (hitBox.Left / TileWidth);
+            int startY = (int) ((hitBox.Top) / TileHeight);
+
+            int endX = (int) (hitBox.Right / TileWidth);
+            int endY = (int) (hitBox.Bottom / TileHeight); 
+
+            var rect = Rectangle.Empty;
+
+            for (int y = startY; y < MapData.GetLength(0) && y <= endY; y++)
+            {
+                for (int x = startX; x < MapData.GetLength(1) && x <= endX; x++)
+                {
+                    if (MapData[y, x] == 2 || MapData[y, x] == 1 || MapData[y, x] == 3 || MapData[y, x] == 4)
+                    {
+                        var tmp = new Rectangle(x*TileWidth, y*TileHeight, TileWidth, TileHeight);
+                        var intersect = Intersection(hitBox, tmp);
+                        return intersect;
+                    }
+                }
+            }
+
+            return rect;
+        }
+
+        public static Rectangle Intersection(Rectangle r1, Rectangle r2)
+        {
+            int x1 = Math.Max(r1.Left, r2.Left);
+            int y1 = Math.Max(r1.Top, r2.Top);
+            int x2 = Math.Min(r1.Right, r2.Right);
+            int y2 = Math.Min(r1.Bottom, r2.Bottom);
+
+            if ((x2 >= x1) && (y2 >= y1))
+            {
+                return new Rectangle(x1, y1, x2 - x1, y2 - y1);
+            }
+            return Rectangle.Empty;
         }
     }
 }

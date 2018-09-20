@@ -14,7 +14,17 @@ namespace BeeSouls
     class Player : DrawableGameComponent, IMovingObjects
     {
         public bool IsDead { get; set; }
-        public Vector2 Position { get; set; }
+
+        public Vector2 Position
+        {
+            get => _position;
+            set
+            {
+                _position = value;
+                playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, 60, 40);
+            } 
+        }
+
         public Vector2 Velocity { get; set; }
 
         //Variables for the graphic
@@ -30,7 +40,7 @@ namespace BeeSouls
         private Texture2D playerDeadTexture;
         private Texture2D playerDeadRightTexture;
 
-        private int direction = 1;
+        public int direction = 1;
         private int wingFlapMult = 35;
         private int playerHealth = 100;
         private Rectangle playerHitBox;
@@ -49,17 +59,35 @@ namespace BeeSouls
 
         private KeyboardState currKeyboardState;
         private KeyboardState prevKeyboardState;
+        private Vector2 _position;
 
         public Player(Game game) : base(game)
         {
             Position = new Vector2(50, 50);
-            currKeyboardState = Keyboard.GetState();
-            prevKeyboardState = currKeyboardState;
         }
 
-        public void Collide(Rectangle[] hitboxes)
+        public void Collide(Rectangle overlap, string direction)
         {
+            if (overlap == Rectangle.Empty)
+                return;
 
+            //if (overlap.Width > overlap.Height)
+            if (direction == "height")
+            {
+                //justera höjdled
+                if (PlayerHitBox.Center.Y > overlap.Center.Y)
+                    Position = new Vector2(Position.X, overlap.Bottom + 1);
+                else
+                   Position = new Vector2(Position.X, overlap.Top - PlayerHitBox.Height - 1);
+            }
+            if(direction == "width")
+            {
+                //justera sidled
+                if (PlayerHitBox.Center.X > overlap.Center.X)
+                    Position = Position + new Vector2(overlap.Width, 0);
+                else
+                    Position = Position + new Vector2(-overlap.Width - 1, 0);
+            }
         }
 
 
@@ -87,42 +115,10 @@ namespace BeeSouls
                 }
             }
 
-           
-            
-
-            if (IsDead == false)
+            else if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
             {
-                if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
-                {
-                    Velocity = new Vector2(0, -2.0f);
 
-                }
-                else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
-                {
-
-                    Velocity = new Vector2(0, 2.0f);
-
-
-                }
-                else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
-                {
-                    Velocity = new Vector2(-2.0f, 0);
-                    direction = -1;
-
-                }
-                else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
-                {
-                    Velocity = new Vector2(2.0f, 0);
-                    direction = 1;
-
-                }
-                else if (currKeyboardState.IsKeyDown(Keys.W) || currKeyboardState.IsKeyDown(Keys.Up))
-                {
-                        Velocity = new Vector2(0, -2.0f);
-
-                }
-                else if (currKeyboardState.IsKeyDown(Keys.S) || currKeyboardState.IsKeyDown(Keys.Down))
-                {
+               
 
                     Velocity = new Vector2(0, 2.0f);
 
@@ -156,6 +152,7 @@ namespace BeeSouls
                 Velocity = new Vector2(0, 0);
             }
 
+            
 
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
             if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
