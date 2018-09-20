@@ -9,7 +9,6 @@ namespace BeeSouls
 {
     interface IMovingObjects
     {
-
         Vector2 Position { get; set; }
         Vector2 Velocity { get; set; }
     }

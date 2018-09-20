@@ -62,7 +62,7 @@ namespace BeeSouls
             screenwidth = graphics.GraphicsDevice.Viewport.Width;
             tileEngine.TileHeight = 70;
             tileEngine.TileWidth = 70;
-            tileEngine.Data = new int[,]
+            tileEngine.MapData = new int[,]
             {   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -78,6 +78,7 @@ namespace BeeSouls
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
+            tileEngine.GenerateHitboxes();
             player = new Player(this);
             Components.Add(player);
 
@@ -118,6 +119,8 @@ namespace BeeSouls
 
             playGameButton = new Button(new Rectangle(300, 100, playgameText.Width, playgameText.Height), true);
             playGameButton.load(Content, "btnPlay");
+
+            Bullet.Texture = Content.Load<Texture2D>("player/playerShot");
 
             base.LoadContent();
         }
@@ -213,6 +216,7 @@ namespace BeeSouls
                     tileEngine.CameraPosition = player.Position;
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
+                    bullet.Update(gameTime);
                     if (state.IsKeyDown(Keys.Down))
                         player.Position += new Vector2(0, 5.0f);
                     if (state.IsKeyDown(Keys.Up))
@@ -224,6 +228,7 @@ namespace BeeSouls
                     var min = new Vector2(400, 240);
                     var max = new Vector2(2940, 1050);
                     player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
+                    //Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
                     //What we want to happen when we play our GAME goes in here.
                     if (ks.IsKeyDown(Keys.Escape))
                     {
@@ -303,7 +308,7 @@ namespace BeeSouls
             }
 
 
-            player.Draw(spriteBatch);         
+            player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
 
