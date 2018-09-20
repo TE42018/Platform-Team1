@@ -46,7 +46,7 @@ namespace BeeSouls
             int screenCenterX = viewportWidth / 2;
             int screenCenterY = viewportHeight / 2;
             min = new Vector2(screenCenterX, screenCenterY);
-            max = new Vector2(2940 - screenCenterX, 1050 - screenCenterY);
+            max = new Vector2(MapData.GetLength(1)*TileWidth - screenCenterX, MapData.GetLength(0)*TileHeight - screenCenterY);
 
 
             CameraPosition = Vector2.Clamp(CameraPosition, min, max);
@@ -84,7 +84,7 @@ namespace BeeSouls
             }
         }
 
-        public Rectangle CheckCollision(Rectangle hitBox)
+        public CollisionData CheckCollision(Rectangle hitBox)
         {
             int startX = (int) (hitBox.Left / TileWidth);
             int startY = (int) ((hitBox.Top) / TileHeight);
@@ -92,17 +92,21 @@ namespace BeeSouls
             int endX = (int) (hitBox.Right / TileWidth);
             int endY = (int) (hitBox.Bottom / TileHeight); 
 
-            var rect = Rectangle.Empty;
+            var rect = new CollisionData();
 
             for (int y = startY; y < MapData.GetLength(0) && y <= endY; y++)
             {
                 for (int x = startX; x < MapData.GetLength(1) && x <= endX; x++)
                 {
-                    if (MapData[y, x] == 2 || MapData[y, x] == 1 || MapData[y, x] == 3 || MapData[y, x] == 4)
+                    if (MapData[y, x] == 2 || MapData[y, x] == 1 || MapData[y, x] == 3 || MapData[y, x] == 4 || MapData[y, x] == 9 || MapData[y, x] == 10)
                     {
                         var tmp = new Rectangle(x*TileWidth, y*TileHeight, TileWidth, TileHeight);
                         var intersect = Intersection(hitBox, tmp);
-                        return intersect;
+                        return new CollisionData()
+                        {
+                            Area = intersect,
+                            Tile = MapData[y, x]
+                        };
                     }
                 }
             }

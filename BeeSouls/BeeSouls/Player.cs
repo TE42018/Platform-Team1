@@ -15,6 +15,11 @@ namespace BeeSouls
     {
         public bool IsDead { get; set; }
 
+        internal static int getInt(string totalCoinKey, int v)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector2 Position
         {
             get => _position;
@@ -59,13 +64,20 @@ namespace BeeSouls
 
         public Player(Game game) : base(game)
         {
-            Position = new Vector2(50, 50);
+            Position = new Vector2(50, 800);
         }
 
-        public void Collide(Rectangle overlap, string direction)
+        public void Collide(CollisionData data, string direction)
         {
+            Rectangle overlap = data.Area;
             if (overlap == Rectangle.Empty)
                 return;
+
+            if (data.Tile == 3)
+            {
+                BeeSoulsGame.LoadNextMAp();
+                Position = new Vector2(50, 50);
+            }
 
             //if (overlap.Width > overlap.Height)
             if (direction == "height")
