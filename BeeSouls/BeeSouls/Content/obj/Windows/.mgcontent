@@ -10,7 +10,6 @@
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/highscores.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/main menu.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/options.png</File>
-    <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/tilemap.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/player/bee.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/player/bee_attack.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/player/bee_attackLeft.png</File>
@@ -47,5 +46,6 @@
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/Shots/laserGreenBurst.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/Shots/laserRedBurst.png</File>
     <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/Shots/laserYellowBurst.png</File>
+    <File>C:/Users/max.gotenstam/Desktop/BeeSouls/Platform-Team1/BeeSouls/BeeSouls/Content/TileMap.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -85,18 +85,6 @@
 /processorParam:TextureFormat=Color
 /build:options.png
 
-#begin tilemap.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tilemap.png
-
 #begin player/bee.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -528,4 +516,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Shots/laserYellowBurst.png
+
+#begin TileMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TileMap.png
 
