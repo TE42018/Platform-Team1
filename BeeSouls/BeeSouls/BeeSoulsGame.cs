@@ -235,23 +235,23 @@ namespace BeeSouls
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
-                    if (state.IsKeyDown(Keys.Down))
+                    if (state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.S))
                     {
                         player.Position += new Vector2(0, 5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
                     }
-                    if (state.IsKeyDown(Keys.Up))
+                    if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.W))
                     {
                         player.Position += new Vector2(0, -5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
                     }
-                    if (state.IsKeyDown(Keys.Left))
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
                     {
                         player.Position += new Vector2(-5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
                         player.direction = -1;
                     }
-                    if (state.IsKeyDown(Keys.Right))
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
                     {
                         player.Position += new Vector2(5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");

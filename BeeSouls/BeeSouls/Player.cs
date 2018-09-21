@@ -154,7 +154,7 @@ namespace BeeSouls
             if (currKeyboardState.IsKeyDown(Keys.E) && prevKeyboardState.IsKeyUp(Keys.E))
             {
                 var bullet = new Bullet(this.Game);
-                bullet.Velocity = new Vector2(direction, 0) * 2;
+                bullet.Velocity = new Vector2(direction, 0) * 8;
                 bullet.Position = Position;
                 bullets.Add(bullet);
             }
@@ -225,7 +225,7 @@ namespace BeeSouls
                 Velocity = new Vector2(0, 0);
 
 
-                if (attackCounter > 200)
+                if (attackCounter > 500)
                 {
 
                     attacking = false;
