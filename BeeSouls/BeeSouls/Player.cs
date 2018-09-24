@@ -119,7 +119,7 @@ namespace BeeSouls
 
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
 
-            Console.WriteLine(playerHealth);
+            //Console.WriteLine(playerHealth);
 
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {
@@ -247,7 +247,7 @@ namespace BeeSouls
                 }
 
             }
-
+            //Console.WriteLine(Position);
             base.Update(gameTime);
         }
 

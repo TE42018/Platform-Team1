@@ -71,7 +71,7 @@ namespace BeeSouls
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(EnemyGraphics, Position, Color.White);
+            spritebatch.Draw(EnemyGraphics, Position + TileEngine.CameraOffset, Color.White);
         }
     }
 }

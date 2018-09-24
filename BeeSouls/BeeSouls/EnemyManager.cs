@@ -13,12 +13,13 @@ namespace BeeSouls
 {
     class EnemyManager: GameObject
     {
-        
+        Player player;
         public int EnemyCount { get; set; }
         public int MaxEnemies { get; set; }
         public int SpawnCounter = 0;
         public float SpawnInterval { get; set; }
-        private Rectangle SnakeHitBox, SnailHitBox, SpiderHitBox, WormHitBox, FlyHitBox;
+        private float difference = 0;
+        private Rectangle SnakeHitBox, SnailHitBox, SpiderHitBox, WormHitBox, FlyHitBox, enemyhitbox;
 
         public Rectangle flyHitBox 
         {
@@ -56,19 +57,19 @@ namespace BeeSouls
         public void Update(GameTime gameTime)
         {
             Texture2D CurrentSnakeTexture = _texturesGround[1];
-            SnakeHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+          //  SnakeHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentSnailTexture = _texturesGround[1];
-            SnailHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+          //  SnailHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentSpiderTexture = _texturesGround[1];
-            SpiderHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+          //  SpiderHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentWormTexture = _texturesGround[1];
-            WormHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+          //  WormHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentFlyTexture = _texturesAir[0];
-            FlyHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+          //  FlyHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
             // lägg till tid på spawncounter
             SpawnCounter += gameTime.ElapsedGameTime.Milliseconds;
             
@@ -76,14 +77,19 @@ namespace BeeSouls
             //Om det är det, spawna en fiende och sätt spawncounter till noll
             if (SpawnCounter >= SpawnInterval && EnemyCount < MaxEnemies)     
             {
-                    
-                    
+
+                
                     
                   
             }
+
             foreach(Enemy ee in enemylist)
             {
-                ee.Position += ee.Velocity;
+                //difference = player.Position.X - ee.Position.X;
+                //if (difference > 850)
+                //{ 
+                    ee.Position += ee.Velocity;
+                //}
             }
           //  Debug.WriteLine(EnemyCount);
            
@@ -95,25 +101,41 @@ namespace BeeSouls
             List<Enemy> _enemyList = new List<Enemy>();
 
             //_enemylist.Add(new Enemy(EnemyType.bat, _textures[enemyrandom.Next(0, 5)], 20, new Vector2(enemyrandom.Next(0, 200), enemyrandom.Next(0, 200))));
-
-            for (int i = 0; i < 20; i++)
+            
+            for (int i = 0; i < 3; i++)
             {
-                
-                if( !SnakeHitBox.Intersects(SnakeHitBox) || !SnakeHitBox.Intersects(SpiderHitBox) || !SnakeHitBox.Intersects(SnailHitBox) || !SnakeHitBox.Intersects(WormHitBox) || !SnakeHitBox.Intersects(FlyHitBox) ||
-                    !SpiderHitBox.Intersects(SnakeHitBox) || !SpiderHitBox.Intersects(SpiderHitBox) || !SpiderHitBox.Intersects(SnailHitBox) || !SpiderHitBox.Intersects(WormHitBox) || !SpiderHitBox.Intersects(FlyHitBox) ||
-                    !SnailHitBox.Intersects(SnakeHitBox) || !SnailHitBox.Intersects(SpiderHitBox) || !SnailHitBox.Intersects(SnailHitBox) || !SnailHitBox.Intersects(WormHitBox) || !SnailHitBox.Intersects(FlyHitBox) ||
-                    !WormHitBox.Intersects(SnakeHitBox) || !WormHitBox.Intersects(SpiderHitBox) || !WormHitBox.Intersects(SnailHitBox) || !WormHitBox.Intersects(WormHitBox) || !WormHitBox.Intersects(FlyHitBox) ||
-                    !FlyHitBox.Intersects(SnakeHitBox) || !FlyHitBox.Intersects(SpiderHitBox) || !FlyHitBox.Intersects(SnailHitBox) || !FlyHitBox.Intersects(WormHitBox) || !FlyHitBox.Intersects(FlyHitBox))
-                {
-                    //ground enemies
-                    _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(950, 1000), 20, new Vector2(-2, 0)));
-                    _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[1], 20, new Vector2(400, 500), 25, new Vector2(-3, 0)));
-                    _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[2], 20, new Vector2(300, 500), 10, new Vector2(-1, 0)));
-                    _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(200, 500), 10, new Vector2(-1, 0)));
-                    //air enemies
-                    _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(100, 100), 20, new Vector2(0, 0)));
-                    Debug.WriteLine("ny enemy spawnades");
-                }
+                ////ground enemies
+                //if (enemyhitbox.Intersects(enemyhitbox))//snake
+                //{
+                   _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 20, new Vector2(0, 0)));
+                    enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[0].Width, _texturesGround[0].Height);
+                //}
+
+                //if (enemyhitbox.Intersects(enemyhitbox))//spider
+                //{
+                   _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[1], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 25, new Vector2(0, 0)));
+                   enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[1].Width, _texturesGround[1].Height);
+                //    //Debug.WriteLine("ny enemy spawnades");
+                //}
+
+                //if (enemyhitbox.Intersects(enemyhitbox))//snail
+                //{
+                    _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[2], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 10, new Vector2(0, 0)));
+                    enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[3].Width, _texturesGround[2].Height);
+                //}
+
+                //if (enemyhitbox.Intersects(enemyhitbox))//worm
+                //{
+                   _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 10, new Vector2(0, 0)));
+                   enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[3].Width, _texturesGround[3].Height);
+                //}
+
+                ////air enemies
+                //if (enemyhitbox.Intersects(enemyhitbox))
+                //{
+                    _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(enemyrandom.Next(200, 2800), enemyrandom.Next(0, 865)), 20, new Vector2(0, 0)));
+                    enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesAir[0].Width, _texturesAir[0].Height);
+                //}
             }
 
             return _enemyList;
