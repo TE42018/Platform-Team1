@@ -20,7 +20,8 @@ namespace BeeSouls
 
         public static Vector2 CameraOffset { get; set; }
 
-        private int viewportWidth, viewportHeight;
+        public int viewportWidth { get; private set; }
+        public int viewportHeight { get; private set; }
 
         public override void Initialize()
         {

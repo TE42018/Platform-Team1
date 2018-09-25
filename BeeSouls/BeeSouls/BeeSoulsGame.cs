@@ -1,10 +1,11 @@
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace BeeSouls
 {
@@ -34,6 +35,9 @@ namespace BeeSouls
         Button playGameButton, optionsButton, highscoreButton, exitButton;
         float screenwidth, screenheight;
         Texture2D bgimage;
+        // music 
+        private Song song;
+            SoundEffect effect;
 
         public BeeSoulsGame()
         {
@@ -127,6 +131,11 @@ namespace BeeSouls
             exitText = Content.Load<Texture2D>("exit");
             bgimage = Content.Load<Texture2D>("main menu");
 
+            //music
+            effect = Content.Load<SoundEffect>("BeeSound");
+            song = Content.Load<Song>("song");
+
+
             exitButton = new Button(new Rectangle(300, 400, exitText.Width, exitText.Height), true);
             exitButton.load(Content, "exit");
             highscoreButton = new Button(new Rectangle(300, 300, highscoreText.Width, highscoreText.Height), true);
@@ -171,11 +180,14 @@ namespace BeeSouls
                 case MENU:
                     //What we want to happen in the MENU screen goes in here.
                     //GO TO PLAYGAME SCREEN
+
                     if (playGameButton.update(new Vector2(mouseState.X, mouseState.Y)) == true &&
                         mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
                     {
                         CurrentScreen = PLAYGAME;
                         tileEngine.CameraPosition = new Vector2(player.Position.X, player.Position.Y);
+                        MediaPlayer.Play(song);
+                        MediaPlayer.IsRepeating = true;
 
                     }
                     else
@@ -235,31 +247,39 @@ namespace BeeSouls
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
+
                     if (state.IsKeyDown(Keys.Down))
                     {
                         player.Position += new Vector2(0, 5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                        effect.Play();
+
                     }
                     if (state.IsKeyDown(Keys.Up))
                     {
                         player.Position += new Vector2(0, -5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                        effect.Play();
                     }
                     if (state.IsKeyDown(Keys.Left))
                     {
                         player.Position += new Vector2(-5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
                         player.direction = -1;
+                        effect.Play();
                     }
                     if (state.IsKeyDown(Keys.Right))
                     {
                         player.Position += new Vector2(5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
                         player.direction = 1;
+                        effect.Play();
                     }
 
-                    var min = new Vector2(400, 240);
-                    var max = new Vector2(2940, 1050);
+                    int screenCenterX = tileEngine.viewportWidth / 2;
+                    int screenCenterY = tileEngine.viewportHeight / 2;
+                    var min = new Vector2(screenCenterX, screenCenterY);
+                    var max = new Vector2(tileEngine.MapData.GetLength(1) * tileEngine.TileWidth, tileEngine.MapData.GetLength(0) * tileEngine.TileHeight);
                     player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
                    // Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
                     //What we want to happen when we play our GAME goes in here.

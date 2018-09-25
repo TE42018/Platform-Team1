@@ -78,7 +78,7 @@ namespace BeeSouls
             if (data.Tile == 3)
             {
                 BeeSoulsGame.LoadNextMAp();
-                Position = new Vector2(50, 50);
+                Position = new Vector2(50, 800);
             }
 
             //if (overlap.Width > overlap.Height)

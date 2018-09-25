@@ -529,3 +529,15 @@
 /processorParam:TextureFormat=Color
 /build:TileMap.png
 
+#begin song.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:song.mp3
+
+#begin BeeSound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:BeeSound.mp3
+
