@@ -18,6 +18,7 @@ namespace BeeSouls
         public Rectangle Hitbox { get; set; }
         public Point Size { get; set; }
         public static Texture2D Texture { get; set; }
+       
 
         public Bullet(Game game) : base(game) 
         {

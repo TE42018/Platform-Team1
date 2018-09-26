@@ -42,8 +42,9 @@ namespace BeeSouls
 
         public int direction = 1;
         private int wingFlapMult = 35;
-        private int playerHealth = 100;
+        private int playerHealth = 10;
         private Rectangle playerHitBox;
+        public Rectangle bHitbox;
 
         public Rectangle PlayerHitBox
         {
@@ -55,8 +56,7 @@ namespace BeeSouls
 
         float timeSinceLastSprite = 0f;
         private float attackCounter = 0f;
-        private float timeSinceLastHit = 0f;
-
+       
         private KeyboardState currKeyboardState;
         private KeyboardState prevKeyboardState;
         private Vector2 _position;
@@ -119,7 +119,10 @@ namespace BeeSouls
 
             playerHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
 
-            Console.WriteLine(playerHealth);
+            var bulletHitBox = bHitbox;
+            var bullet = new Bullet(this.Game);
+            bulletHitBox = new Rectangle((int)bullet.Position.X, (int)bullet.Position.Y, Bullet.Texture.Width, Bullet.Texture.Height);
+
 
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {
@@ -129,35 +132,39 @@ namespace BeeSouls
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
                 }
+
+                for (int j = 0; j < bullets.Count; j++)
+                {
+                    Bullet b = bullets[j];
+
+                    if (b.Hitbox.Intersects(enemyBox))
+                    {
+                       bullets.RemoveAt(j);
+                       EnemyManager.enemylist.RemoveAt(i);
+                    }
+                }
             }
 
             foreach (var b in bullets)
                 b.Update(gameTime);
-
-            if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
+            
+            if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) /*&& !PlayerAttack.IsAttacking*/)
             {
                 attacking = true;
                 Velocity = new Vector2(0, 2.0f);
             }
-            else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
-            {
-                Velocity = new Vector2(-2.0f, 0);
-                direction = -1;
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
-            {
-                Velocity = new Vector2(2.0f, 0);
-                direction = 1;
 
-            }
-
+           
+          
             if (currKeyboardState.IsKeyDown(Keys.E) && prevKeyboardState.IsKeyUp(Keys.E))
             {
-                var bullet = new Bullet(this.Game);
+                
                 bullet.Velocity = new Vector2(direction, 0) * 8;
                 bullet.Position = Position;
                 bullets.Add(bullet);
             }
+
+          
 
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
             if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
@@ -165,7 +172,6 @@ namespace BeeSouls
                 if (direction > 0)
                 {
                     currentTexture = playerFlyTexture;
-
                 }
                 else
                 {
@@ -193,9 +199,9 @@ namespace BeeSouls
                     currentTexture = playerLeftTexture;
                     if (IsPlayerHit == true)
                     {
+                        playerHealth -= 10;
                         currentTexture = playerHitLeftTexture;
                         IsPlayerHit = false;
-
                     }
                     else if (IsDead == true)
                     {
@@ -205,6 +211,36 @@ namespace BeeSouls
                 }
             }
 
+            if (attacking == true)
+            {
+                attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                Velocity = new Vector2(0, 0);
+               
+
+                if (attackCounter > 500)
+                {
+                    attacking = false;
+                    attackCounter = 0;
+                  
+                }
+                else
+                {
+             
+                    if (direction > 0)
+                    {
+                        currentTexture = playerAttackTexture;
+                      
+                    }
+                    else
+                    {
+                        currentTexture = playerAttackLeftTexture;
+                       
+                    }
+
+                }
+
+            }
 
 
             if (playerHealth <= 0)
@@ -216,37 +252,6 @@ namespace BeeSouls
                 IsDead = false;
             }
 
-
-
-            if (attacking == true)
-            {
-                attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-                Velocity = new Vector2(0, 0);
-
-
-                if (attackCounter > 500)
-                {
-
-                    attacking = false;
-                    attackCounter = 0;
-                }
-                else
-                {
-                    if (direction > 0)
-                    {
-                        currentTexture = playerAttackTexture;
-
-                    }
-                    else
-                    {
-                        currentTexture = playerAttackLeftTexture;
-
-                    }
-
-                }
-
-            }
 
             base.Update(gameTime);
         }
