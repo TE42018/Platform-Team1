@@ -8,7 +8,7 @@ namespace BeeSouls
 {
     class Player : DrawableGameComponent, IMovingObjects
     {
-        public bool IsDead { get; set; }
+        public static bool IsDead { get; set; }
 
         internal static int getInt(string totalCoinKey, int v)
         {
@@ -127,7 +127,12 @@ namespace BeeSouls
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {
                 Rectangle enemyBox = EnemyManager.enemylist[i].Hitbox;
-                if (playerHitBox.Intersects(enemyBox))
+                if (playerHitBox.Intersects(enemyBox) && attacking == true)
+                {
+                    //EnemyManager.enemylist.RemoveAt(i);
+                    Console.WriteLine("där fick han");
+                }
+                else if (playerHitBox.Intersects(enemyBox))
                 {
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
@@ -148,15 +153,14 @@ namespace BeeSouls
             foreach (var b in bullets)
                 b.Update(gameTime);
             
-            if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) /*&& !PlayerAttack.IsAttacking*/)
+            if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !attacking && !IsDead)
             {
                 attacking = true;
-                Velocity = new Vector2(0, 2.0f);
             }
 
            
           
-            if (currKeyboardState.IsKeyDown(Keys.E) && prevKeyboardState.IsKeyUp(Keys.E))
+            if (currKeyboardState.IsKeyDown(Keys.E) && prevKeyboardState.IsKeyUp(Keys.E) && !IsDead)
             {
                 
                 bullet.Velocity = new Vector2(direction, 0) * 8;
@@ -210,37 +214,51 @@ namespace BeeSouls
                     }
                 }
             }
+            
 
-            if (attacking == true)
+            if (attacking)
             {
                 attackCounter += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                Velocity = new Vector2(0, 0);
                
 
-                if (attackCounter > 500)
+                Console.WriteLine(attackCounter);
+                //if (attackCounter > 500)
+                //{
+                //    attacking = false;
+                //    attackCounter = 0;
+
+                //}
+                //else
+                //{
+
+                if (direction > 0)
                 {
-                    attacking = false;
-                    attackCounter = 0;
-                  
+                    currentTexture = playerAttackTexture;
+
+                    if (attackCounter > 200)
+                    {
+                        attacking = false;
+
+                    }
                 }
                 else
                 {
-             
-                    if (direction > 0)
-                    {
-                        currentTexture = playerAttackTexture;
-                      
-                    }
-                    else
-                    {
-                        currentTexture = playerAttackLeftTexture;
-                       
-                    }
+                    currentTexture = playerAttackLeftTexture;
 
+                    if (attackCounter > 200)
+                    {
+                        attacking = false;
+
+                    }
                 }
 
+                //}
+                if (attacking == false)
+                    attackCounter = 0;
+
             }
+
 
 
             if (playerHealth <= 0)
