@@ -21,7 +21,7 @@ namespace BeeSouls
         PlayerAttack bullet;
 
         EnemyManager enemyManager;
-        static TileEngine tileEngine;
+        public static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
         KeyboardState ks;
@@ -175,26 +175,13 @@ namespace BeeSouls
             ks = Keyboard.GetState();
 
             KeyboardState state = Keyboard.GetState();
-            GamePadState state2 = GamePadState.Default;
+
 
             Console.WriteLine(player.Velocity.Length());
 
-            if (GamePad .GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ==
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                
-            }
-
-            GamePadCapabilities c = GamePad.GetCapabilities(PlayerIndex.One);
-            if (c.IsConnected)
-            {
-                state2 = GamePad.GetState(PlayerIndex.One);
-                if (c.HasLeftXThumbStick)
-                    player.Position.X += state2.ThumbSticks.Left.X * 5.0f;
 
 
-            }
-            switch (CurrentScreen)
+                switch (CurrentScreen)
             {
                 case MENU:
                     //What we want to happen in the MENU screen goes in here.

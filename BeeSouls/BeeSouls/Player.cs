@@ -114,6 +114,7 @@ namespace BeeSouls
 
             prevKeyboardState = currKeyboardState;
             currKeyboardState = Keyboard.GetState();
+            GamePadState state = GamePadState.Default;
 
             var attacking = PlayerAttack.IsAttacking;
 
@@ -245,6 +246,61 @@ namespace BeeSouls
 
                 }
 
+            }
+            GamePadCapabilities c = GamePad.GetCapabilities(PlayerIndex.One);
+            if (c.IsConnected)
+            {
+                state = GamePad.GetState(PlayerIndex.One);
+                if (c.HasLeftXThumbStick)
+                {
+                    if (state.ThumbSticks.Left.X < -0.5f)
+                    {
+                        Position += new Vector2(-5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = -1;
+                    }   
+
+                    if (state.ThumbSticks.Left.X > 0.5f)
+                    {
+                        Position += new Vector2(5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = 1;
+                    }
+                    if (state.ThumbSticks.Left.Y < -0.5f)
+                    {
+                        Position += new Vector2(0,5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+
+                    if (state.ThumbSticks.Left.Y > 0.5f)
+                    {
+                        Position += new Vector2(0, -5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+                }
+
+                if (c.GamePadType == GamePadType.GamePad)
+                {
+                    if (state.IsButtonDown(Buttons.Back))
+                    {
+
+                    }
+
+                    if (state.IsButtonDown(Buttons.A))
+                    {
+                        var bullet = new Bullet(this.Game);
+                        bullet.Velocity = new Vector2(direction, 0) * 2;
+                        bullet.Position = Position;
+                        bullets.Add(bullet);
+
+
+                    }
+
+
+
+                }
             }
 
             base.Update(gameTime);

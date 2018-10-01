@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace BeeSouls
 {
-    class TileEngine : GameComponent
+    public class TileEngine : GameComponent
     {
         public int TileWidth { get; set; }
         public int TileHeight { get; set; }
