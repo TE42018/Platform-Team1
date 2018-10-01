@@ -11,19 +11,25 @@ using System.Diagnostics;
 
 namespace BeeSouls
 {
-    class Bullet : DrawableGameComponent, IMovingObjects
+    class BossBullet : DrawableGameComponent, IMovingObjects
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public Rectangle Hitbox { get; set; }
         public Point Size { get; set; }
-        public static Texture2D Texture { get; set; }
-       
+        public static Texture2D bbTexture { get; set; }
 
-        public Bullet(Game game) : base(game) 
+
+        public BossBullet(Game game) : base(game)
         {
-            Size = new Point(Texture.Width, Texture.Height);
+            Size = new Point(bbTexture.Width, bbTexture.Height);
         }
+
+        public new void LoadContent()
+        {
+            bbTexture = Game.Content.Load<Texture2D>("boss/bulletboi");
+        }
+
 
         public override void Update(GameTime gameTime)
         {
@@ -33,7 +39,7 @@ namespace BeeSouls
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, new Vector2(Position.X + TileEngine.CameraOffset.X, Position.Y + TileEngine.CameraOffset.Y), Color.White);
+            spriteBatch.Draw(bbTexture, new Vector2(Position.X + TileEngine.CameraOffset.X, Position.Y + TileEngine.CameraOffset.Y), Color.White);
         }
     }
 }

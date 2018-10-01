@@ -20,6 +20,8 @@ namespace BeeSouls
         PlayerAttack bullet;
 
         EnemyManager enemyManager;
+        Boss boss;
+
         static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
@@ -77,8 +79,12 @@ namespace BeeSouls
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
+
             player = new Player(this);
             Components.Add(player);
+
+            boss = new Boss(this);
+            Components.Add(boss);
 
             bullet = new PlayerAttack(this);
             Components.Add(bullet);
@@ -235,6 +241,7 @@ namespace BeeSouls
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
+                    boss.Update(gameTime);
                     if (Player.IsDead == false )
                     {
                         if (state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.S))
@@ -309,6 +316,7 @@ namespace BeeSouls
             
             tileEngine.Draw(gameTime, spriteBatch);
             enemyManager.Draw(spriteBatch);
+            //boss.Draw(spriteBatch);
             switch (CurrentScreen)
             {
                 case MENU:
@@ -349,6 +357,7 @@ namespace BeeSouls
 
 
             player.Draw(spriteBatch);
+            boss.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
 

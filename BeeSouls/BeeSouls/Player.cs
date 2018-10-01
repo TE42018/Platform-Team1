@@ -51,6 +51,7 @@ namespace BeeSouls
             get { return playerHitBox; }
         }
 
+        public static float xPos;
 
         bool IsPlayerHit = false;
 
@@ -111,7 +112,6 @@ namespace BeeSouls
         public override void Update(GameTime gameTime)
         {
             timeSinceLastSprite += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             prevKeyboardState = currKeyboardState;
             currKeyboardState = Keyboard.GetState();
 
@@ -123,6 +123,7 @@ namespace BeeSouls
             var bullet = new Bullet(this.Game);
             bulletHitBox = new Rectangle((int)bullet.Position.X, (int)bullet.Position.Y, Bullet.Texture.Width, Bullet.Texture.Height);
 
+            xPos = Position.X;
 
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {
@@ -149,6 +150,14 @@ namespace BeeSouls
                     }
                 }
             }
+
+            var bossBox = Boss.bossHitBox;
+
+            if (playerHitBox.Intersects(bossBox))
+            {
+                Console.WriteLine("här är bossen");
+            }
+
 
             foreach (var b in bullets)
                 b.Update(gameTime);
@@ -259,7 +268,7 @@ namespace BeeSouls
 
             }
 
-
+            
 
             if (playerHealth <= 0)
             {
