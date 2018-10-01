@@ -137,7 +137,6 @@ namespace BeeSouls
             if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
             {
                 attacking = true;
-                Velocity = new Vector2(0, 2.0f);
             }
             else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
             {

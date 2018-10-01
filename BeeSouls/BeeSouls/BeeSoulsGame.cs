@@ -38,6 +38,7 @@ namespace BeeSouls
         // music 
         private Song song;
             SoundEffect effect;
+            SoundEffectInstance effectInstance;
 
         public BeeSoulsGame()
         {
@@ -133,6 +134,7 @@ namespace BeeSouls
 
             //music
             effect = Content.Load<SoundEffect>("BeeSound");
+            effectInstance = effect.CreateInstance();
             song = Content.Load<Song>("song");
 
 
@@ -173,8 +175,25 @@ namespace BeeSouls
             ks = Keyboard.GetState();
 
             KeyboardState state = Keyboard.GetState();
+            GamePadState state2 = GamePadState.Default;
+
+            Console.WriteLine(player.Velocity.Length());
+
+            if (GamePad .GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ==
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                
+            }
+
+            GamePadCapabilities c = GamePad.GetCapabilities(PlayerIndex.One);
+            if (c.IsConnected)
+            {
+                state2 = GamePad.GetState(PlayerIndex.One);
+                if (c.HasLeftXThumbStick)
+                    player.Position.X += state2.ThumbSticks.Left.X * 5.0f;
 
 
+            }
             switch (CurrentScreen)
             {
                 case MENU:
@@ -252,29 +271,43 @@ namespace BeeSouls
                     {
                         player.Position += new Vector2(0, 5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
-                        effect.Play();
+
 
                     }
-                    if (state.IsKeyDown(Keys.Up))
+
+                        if (state.IsKeyDown(Keys.Up))
                     {
                         player.Position += new Vector2(0, -5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
-                        effect.Play();
+
                     }
+
                     if (state.IsKeyDown(Keys.Left))
                     {
                         player.Position += new Vector2(-5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
                         player.direction = -1;
-                        effect.Play();
                     }
+
                     if (state.IsKeyDown(Keys.Right))
                     {
                         player.Position += new Vector2(5.0f, 0);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
                         player.direction = 1;
-                        effect.Play();
+                       
                     }
+
+                    if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.Left) ||
+                        state.IsKeyDown(Keys.Right))
+                    {
+                        if (effectInstance.State == SoundState.Stopped)
+                            effectInstance.Play();
+                    }
+                    else
+                    {
+                        effectInstance.Stop();
+                    }
+
 
                     int screenCenterX = tileEngine.viewportWidth / 2;
                     int screenCenterY = tileEngine.viewportHeight / 2;
