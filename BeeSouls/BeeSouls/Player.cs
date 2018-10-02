@@ -58,8 +58,10 @@ namespace BeeSouls
         private float attackCounter = 0f;
         private float timeSinceLastHit = 0f;
 
-        private KeyboardState currKeyboardState;
-        private KeyboardState prevKeyboardState;
+        public KeyboardState currKeyboardState;
+        public KeyboardState prevKeyboardState;
+        private GamePadState _currentGamepadState;
+        private GamePadState _prevGamepadState;
         private Vector2 _position;
         List<Bullet> bullets = new List<Bullet>();
 
@@ -79,7 +81,7 @@ namespace BeeSouls
             if (data.Tile == 3)
             {
                 BeeSoulsGame.LoadNextMAp();
-                Position = new Vector2(50, 50);
+                Position = new Vector2(50, 800);
             }
 
             //if (overlap.Width > overlap.Height)
@@ -114,6 +116,8 @@ namespace BeeSouls
             timeSinceLastSprite += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             prevKeyboardState = currKeyboardState;
+            _prevGamepadState = _currentGamepadState;
+            _currentGamepadState = GamePadState.Default;
             currKeyboardState = Keyboard.GetState();
 
             var attacking = PlayerAttack.IsAttacking;
@@ -140,24 +144,12 @@ namespace BeeSouls
             if (currKeyboardState.IsKeyDown(Keys.Space) && !prevKeyboardState.IsKeyDown(Keys.Space) && !PlayerAttack.IsAttacking)
             {
                 attacking = true;
-                Velocity = new Vector2(0, 2.0f);
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.A) || currKeyboardState.IsKeyDown(Keys.Left))
-            {
-                Velocity = new Vector2(-2.0f, 0);
-                direction = -1;
-            }
-            else if (currKeyboardState.IsKeyDown(Keys.D) || currKeyboardState.IsKeyDown(Keys.Right))
-            {
-                Velocity = new Vector2(2.0f, 0);
-                direction = 1;
-
             }
 
             if (currKeyboardState.IsKeyDown(Keys.E) && prevKeyboardState.IsKeyUp(Keys.E))
             {
                 var bullet = new Bullet(this.Game);
-                bullet.Velocity = new Vector2(direction, 0) * 2;
+                bullet.Velocity = new Vector2(direction, 0) * 8;
                 bullet.Position = Position;
                 bullets.Add(bullet);
             }
@@ -251,7 +243,63 @@ namespace BeeSouls
                 }
 
             }
-            //Console.WriteLine(Position);
+            GamePadCapabilities c = GamePad.GetCapabilities(PlayerIndex.One);
+            if (c.IsConnected)
+            {
+                _currentGamepadState = GamePad.GetState(PlayerIndex.One,GamePadDeadZone.None);
+                if (c.HasLeftXThumbStick)
+                {
+                    if (_currentGamepadState.ThumbSticks.Left.X < -0.5f)
+                    {
+                        Position += new Vector2(-5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = -1;
+                    }   
+
+                    if (_currentGamepadState.ThumbSticks.Left.X > 0.5f)
+                    {
+                        Position += new Vector2(5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = 1;
+                    }
+                    if (_currentGamepadState.ThumbSticks.Left.Y < -0.5f)
+                    {
+                        Position += new Vector2(0,5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+
+                    if (_currentGamepadState.ThumbSticks.Left.Y > 0.5f)
+                    {
+                        Position += new Vector2(0, -5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+                }
+
+                if (c.GamePadType == GamePadType.GamePad)
+                {
+                    if (_currentGamepadState.IsButtonDown(Buttons.Back))
+                    {
+                       BeeSoulsGame g = this.Game as BeeSoulsGame;
+                        g.Exit();
+                    }
+
+                    if (_currentGamepadState.IsButtonDown(Buttons.A) && _prevGamepadState.IsButtonUp(Buttons.A))
+                    {
+                        var bullet = new Bullet(this.Game);
+                        bullet.Velocity = new Vector2(direction, 0) * 8;
+                        bullet.Position = Position;
+                        bullets.Add(bullet);
+
+
+                    }
+
+
+
+                }
+            }
+
             base.Update(gameTime);
         }
 
