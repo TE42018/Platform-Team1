@@ -30,10 +30,9 @@ namespace BeeSouls
 
         public void Shoot() 
         {
-            //bulletList.Add(new Bullet(Game) { Position = BulletOrigin, Velocity });
+         
           
             this.Velocity = new Vector2(bulletSpeed, 0);
-            //his.Position = BulletOrigin;
             this.bulletHitBox = new Rectangle((int)this.Position.X, (int)this.Position.Y, bulletTexture.Width, bulletTexture.Height);
             
         }

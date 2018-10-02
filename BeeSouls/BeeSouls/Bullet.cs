@@ -18,16 +18,11 @@ namespace BeeSouls
         public Rectangle Hitbox { get; set; }
         public Point Size { get; set; }
         public static Texture2D Texture { get; set; }
+       
 
         public Bullet(Game game) : base(game) 
         {
             Size = new Point(Texture.Width, Texture.Height);
-            //Hitbox = new Rectangle(Point.Zero, new Point(Texture.Width, Texture.Height));
-        }
-
-        public new void LoadContent()
-        {
-
         }
 
         public override void Update(GameTime gameTime)

@@ -20,8 +20,12 @@ namespace BeeSouls
 
         Player player;
         PlayerAttack bullet;
+        
 
         EnemyManager enemyManager;
+        static Boss boss;
+
+        static TileEngine tileEngine;
         public static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
@@ -87,12 +91,16 @@ namespace BeeSouls
                 {0,0,0,0,0,0,5,0,0,1,0,0,5,0,0,6,0,0,0,0,0,1,2,1,0,0,0,5,0,0,0,0,0,1,0,0,0,6,0,0,0,3},
                 {1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1},
                 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
+
             player = new Player(this);
             Components.Add(player);
 
+            boss = new Boss(this);
+            Components.Add(boss);
+
             bullet = new PlayerAttack(this);
             Components.Add(bullet);
-          
+
             base.Initialize();
         }
         internal void ChangeState(MenuState menuState)
@@ -102,6 +110,8 @@ namespace BeeSouls
 
         public static void LoadNextMAp()
         {
+            boss.HasSpawned = true;
+           
             tileEngine.MapData = new int[,]
             {   {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11},
                 {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11},
@@ -157,6 +167,10 @@ namespace BeeSouls
             playGameButton.load(Content, "btnPlay");
 
             Bullet.Texture = Content.Load<Texture2D>("player/playerShot");
+            BossBullet.BossBulletTexture = Content.Load<Texture2D>("boss/bulletboi");
+
+            //bossBullet = new BossBullet(this);
+            //Components.Add(bossBullet);
 
             base.LoadContent();
         }
@@ -254,24 +268,50 @@ namespace BeeSouls
 
                     break;
 
-
+                    
 
                 case PLAYGAME:
                     tileEngine.CameraPosition = player.Position;
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
+                    boss.Update(gameTime);
+                    if (Player.IsDead == false )
 
                     if (state.IsKeyDown(Keys.Down))
                     {
+                        if (state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.S))
+                        {
+                            player.Position += new Vector2(0, 5.0f);
+                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                        }
+                        if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.W))
+                        {
+                            player.Position += new Vector2(0, -5.0f);
+                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                        }
+                        if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
+                        {
+                            player.Position += new Vector2(-5.0f, 0);
+                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                            player.direction = -1;
+                        }
+                        if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
+                        {
+                            player.Position += new Vector2(5.0f, 0);
+                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                            player.direction = 1;
+                        }
                         player.Position += new Vector2(0, 5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
 
 
                     }
+                    else
 
                         if (state.IsKeyDown(Keys.Up))
                     {
+                        Console.WriteLine("Man kan inte g� n�r man e d�d");
                         player.Position += new Vector2(0, -5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
 
@@ -386,6 +426,7 @@ namespace BeeSouls
             
             tileEngine.Draw(gameTime, spriteBatch);
             enemyManager.Draw(spriteBatch);
+            //boss.Draw(spriteBatch);
             switch (CurrentScreen)
             {
                 case MENU:
@@ -426,6 +467,7 @@ namespace BeeSouls
 
 
             player.Draw(spriteBatch);
+            boss.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
 
