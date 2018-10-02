@@ -25,7 +25,6 @@ namespace BeeSouls
         EnemyManager enemyManager;
         static Boss boss;
 
-        static TileEngine tileEngine;
         public static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
