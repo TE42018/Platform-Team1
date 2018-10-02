@@ -17,6 +17,7 @@ namespace BeeSouls
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
         Player player;
         PlayerAttack bullet;
 
@@ -27,6 +28,7 @@ namespace BeeSouls
         KeyboardState ks;
         Color col;
 
+
         const byte MENU = 0, PLAYGAME = 1, GAMEOVER = 2, HIGHSCORE = 3, OPTIONS = 4, EXIT = 5;
         int CurrentScreen = MENU;
 
@@ -36,9 +38,11 @@ namespace BeeSouls
         float screenwidth, screenheight;
         Texture2D bgimage;
         // music 
-        private Song song;
+        public Song song;
             SoundEffect effect;
             SoundEffectInstance effectInstance;
+
+
 
         public BeeSoulsGame()
         {
@@ -51,6 +55,7 @@ namespace BeeSouls
             graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
             graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
             //graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+
         }
 
         /// <summary>
@@ -136,6 +141,8 @@ namespace BeeSouls
             effect = Content.Load<SoundEffect>("BeeSound");
             effectInstance = effect.CreateInstance();
             song = Content.Load<Song>("song");
+            effectInstance.Volume = 0.5f;
+
 
 
             exitButton = new Button(new Rectangle(300, 400, exitText.Width, exitText.Height), true);
@@ -194,6 +201,7 @@ namespace BeeSouls
                         tileEngine.CameraPosition = new Vector2(player.Position.X, player.Position.Y);
                         MediaPlayer.Play(song);
                         MediaPlayer.IsRepeating = true;
+                        MediaPlayer.Volume = 0.5f;
 
                     }
                     else
@@ -293,6 +301,42 @@ namespace BeeSouls
                     else
                     {
                         effectInstance.Stop();
+                    }
+
+                    if (player.currKeyboardState.IsKeyDown(Keys.K) && player.prevKeyboardState.IsKeyUp(Keys.K))
+                    {
+                        effectInstance.Volume += 0.1f;
+                    }
+                    else if (player.currKeyboardState.IsKeyDown(Keys.J) && player.prevKeyboardState.IsKeyUp(Keys.J))
+
+                    {
+                        effectInstance.Volume -= 0.1f;
+                    }
+                    else if (effectInstance.Volume >= 0.9f)
+                    {
+                        effectInstance.Volume = 0.9f;
+                    }
+                    else if (effectInstance.Volume <= 0.1f)
+                    {
+                        effectInstance.Volume = 0.1f;
+                    }
+
+                    if (player.currKeyboardState.IsKeyDown(Keys.I) && player.prevKeyboardState.IsKeyUp(Keys.I))
+                    {
+                        MediaPlayer.Volume += 0.1f;
+                    }
+                    else if (player.currKeyboardState.IsKeyDown(Keys.O) && player.prevKeyboardState.IsKeyUp(Keys.O))
+
+                    {
+                        MediaPlayer.Volume -= 0.1f;
+                    }
+                    else if (MediaPlayer.Volume >= 1.0f)
+                    {
+                        MediaPlayer.Volume = 1.0f;
+                    }
+                    else if (MediaPlayer.Volume <= 0.0f)
+                    {
+                        MediaPlayer.Volume = 0.0f;
                     }
 
 
