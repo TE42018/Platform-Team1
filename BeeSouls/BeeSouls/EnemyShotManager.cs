@@ -14,32 +14,41 @@ namespace BeeSouls
         private List<Texture2D> _texturesShot;
 
         List<EnemyShot> enemyShots = new List<EnemyShot>();
-
+        Texture2D EnemybulletTexture;
+        int maxbulletcount = 30;
+        int currentbulletcount = 0;
 
         public void Loadcontent(ContentManager Content)
         {
 
-            _texturesShot = new List<Texture2D>()
-             {
-                 Content.Load<Texture2D>("shots/laserblueburst"),
-                 Content.Load<Texture2D>("shots/laserrgreenburst"),
-                 Content.Load<Texture2D>("shots/laserredburst"),
-                 Content.Load<Texture2D>("shots/laseryellowburst"),
-             };
-        }
+            EnemybulletTexture = Content.Load<Texture2D>("shots/laserblueburst");
+            //_texturesShot = new List<Texture2D>()
+            // {
+            //     Content.Load<Texture2D>("shots/laserblueburst"),
+            //     Content.Load<Texture2D>("shots/laserrgreenburst"),
+            //     Content.Load<Texture2D>("shots/laserredburst"),
+            //     Content.Load<Texture2D>("shots/laseryellowburst"),
+            // };
+        }   
 
 
         float shoot = 0;
 
         public void Update(GameTime gameTime)
         {
-            shoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (shoot > 1)
-            {
-                shoot = 0;
-                EnemyShootBullets();
+            if (currentbulletcount < maxbulletcount)
+            { 
+                shoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (shoot > 1)
+                {
+                    shoot = 0;
+                    EnemyShootBullets();
+                    currentbulletcount++;
+                    Console.WriteLine("Shoot");
+                    Console.WriteLine(currentbulletcount);
+                }
+                UpdateBullet();
             }
-            UpdateBullet();
         }
 
         public void UpdateBullet()
@@ -47,7 +56,9 @@ namespace BeeSouls
 
             foreach (EnemyShot enemyShot in enemyShots)
             {
+                
                 enemyShot.Position += enemyShot.Velocity;
+                
                 if (enemyShot.Position.X < 0)
                 {
                     enemyShot.isVisible = false;
@@ -58,6 +69,7 @@ namespace BeeSouls
                     {
                         enemyShots.RemoveAt(i);
                         i--;
+                        currentbulletcount--;
                     }
                 }
             }
@@ -65,21 +77,18 @@ namespace BeeSouls
 
         public void EnemyShootBullets()
         {
-            EnemyShot newEnemyShot = new EnemyShot(_texturesShot[0]);
+            EnemyShot newEnemyShot = new EnemyShot(EnemybulletTexture);
             newEnemyShot.EnemyShootVelocity.X = Velocity.X - 3f;
-            newEnemyShot.EnemyShotPosition = new Vector2(Position.X + newEnemyShot.EnemyShootVelocity.X, Position.Y + (_texturesShot[0].Height / 2) - (_texturesShot[0].Height / 2));
+            newEnemyShot.EnemyShotPosition = new Vector2(Position.X + newEnemyShot.EnemyShootVelocity.X, Position.Y + (EnemybulletTexture.Height / 2) - (EnemybulletTexture.Height / 2));
 
             newEnemyShot.isVisible = true;
             if (enemyShots.Count < 3)
             {
                 enemyShots.Add(newEnemyShot);
             }
-
         }
-
         public void Draw(SpriteBatch spritebatch)
         {
-
             foreach (EnemyShot enemyShot in enemyShots)
                 spritebatch.Draw(enemyShot.ShotTexture, new Vector2(Position.X + TileEngine.CameraOffset.X, Position.Y + TileEngine.CameraOffset.Y), Color.White);
         }

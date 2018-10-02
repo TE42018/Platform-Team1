@@ -34,8 +34,8 @@ namespace BeeSouls
             Hitbox = new Rectangle(Position.ToPoint(), new Point(EnemyGraphics.Width, EnemyGraphics.Height));
             Velocity = _Velocity;
             
-            switch (Type)
-            {
+            //switch (Type)
+            //{
                 //case EnemyType.worm:
                 //    Position = new Vector2(0, 0);
                 //    EnemyGraphics = enemy/worm;
@@ -61,7 +61,7 @@ namespace BeeSouls
                 //    EnemyGraphics = "enemy/bat";
                 //    EnemyDamage = 1;
                 //    break;
-            }
+           // }
         }
         public void Update(GameTime gameTime)
         {

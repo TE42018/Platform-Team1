@@ -128,6 +128,7 @@ namespace BeeSouls
                 {
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
+                    EnemyManager.EnemyCount--;
                 }
             }
 

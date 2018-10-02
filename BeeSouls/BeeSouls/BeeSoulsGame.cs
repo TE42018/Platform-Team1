@@ -20,6 +20,7 @@ namespace BeeSouls
         PlayerAttack bullet;
 
         EnemyManager enemyManager;
+        EnemyShotManager enemyShotManager;
         static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
@@ -40,6 +41,7 @@ namespace BeeSouls
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             enemyManager = new EnemyManager(Content);
+            enemyShotManager = new EnemyShotManager();
             tileEngine = new TileEngine(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
@@ -119,6 +121,7 @@ namespace BeeSouls
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             enemyManager.Loadcontent(Content);
+            enemyShotManager.Loadcontent(Content);
             tileEngine.TileMap = Content.Load<Texture2D>("tilemap");
             //Things we want to load in the MENU screen.
             highscoreText = Content.Load<Texture2D>("highscores");
@@ -233,12 +236,15 @@ namespace BeeSouls
                 case PLAYGAME:
                     tileEngine.CameraPosition = player.Position;
                     enemyManager.Update(gameTime);
+                    enemyShotManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
+                    
                     if (state.IsKeyDown(Keys.Down))
                     {
                         player.Position += new Vector2(0, 5.0f);
                         player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+                        
                     }
                     if (state.IsKeyDown(Keys.Up))
                     {
@@ -302,6 +308,7 @@ namespace BeeSouls
             
             tileEngine.Draw(gameTime, spriteBatch);
             enemyManager.Draw(spriteBatch);
+            enemyShotManager.Draw(spriteBatch);
             switch (CurrentScreen)
             {
                 case MENU:

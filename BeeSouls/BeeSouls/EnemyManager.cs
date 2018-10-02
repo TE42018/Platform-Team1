@@ -14,17 +14,18 @@ namespace BeeSouls
     class EnemyManager: GameObject
     {
         Player player;
-        public int EnemyCount { get; set; }
+        public static int EnemyCount;
         public int MaxEnemies { get; set; }
         public int SpawnCounter = 0;
         public float SpawnInterval { get; set; }
-        private float difference = 0;
+        private float difference;
+        private int SnakeCount, SnailCount, SpiderCount, WormCount, FlyCount;
         private Rectangle SnakeHitBox, SnailHitBox, SpiderHitBox, WormHitBox, FlyHitBox, enemyhitbox;
-
+       
         public Rectangle flyHitBox 
         {
             get { return FlyHitBox; }
-        }
+        } 
 
         private List<Texture2D> _texturesGround;
         private List<Texture2D> _texturesAir;
@@ -32,7 +33,7 @@ namespace BeeSouls
         public static List<Enemy> enemylist = new List<Enemy>();
         public EnemyManager(ContentManager content)
         {
-            EnemyCount = 5;
+            EnemyCount = 0;
             MaxEnemies = 15;
             
             
@@ -56,6 +57,7 @@ namespace BeeSouls
         }
         public void Update(GameTime gameTime)
         {
+
             Texture2D CurrentSnakeTexture = _texturesGround[1];
           //  SnakeHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
@@ -78,23 +80,84 @@ namespace BeeSouls
             if (SpawnCounter >= SpawnInterval && EnemyCount < MaxEnemies)     
             {
 
-                
+                CreateEnemies(EnemyCount);
                     
                   
             }
+            for (int j = 0; j < enemylist.Count; j++)
+                {
+                    
+                    //difference = ppos - enemylist[j].Position.X;
+                    //Console.WriteLine("P: "  + ppos);
+                    //Console.WriteLine("E: " + enemylist[j].Position.X);
+                    //if (difference < 200)
+                    //{
+                        enemylist[j].Position += enemylist[j].Velocity;
+                    //    Console.WriteLine("difference is " + difference);
+                    //}
+                }
+            UpdateEnemy();
 
-            foreach(Enemy ee in enemylist)
+            //Debug.WriteLine(EnemyCount);
+
+        }
+        public void Collide(CollisionData data, string direction)
+        {
+            Rectangle overlap = data.Area;
+            foreach(Enemy e in enemylist)
+            { 
+                if (overlap == Rectangle.Empty)
+                {
+                    return;
+                }
+
+
+                //if (overlap.Width > overlap.Height)
+                if (direction == "height")
+                {
+                    //justera höjdled
+                    if (enemyhitbox.Center.Y > overlap.Center.Y)
+                    {
+                        Position = new Vector2(Position.X, overlap.Bottom + 1);
+                    }
+                    else
+                    {
+                        Position = new Vector2(Position.X, overlap.Top - enemyhitbox.Height - 1);
+                    }
+                }
+                if (direction == "width")
+                {
+                    //justera sidled
+                    if (enemyhitbox.Center.X > overlap.Center.X)
+                    {
+                        Position = Position + new Vector2(overlap.Width, 0);
+                    }
+                    else
+                    {
+                        Position = Position + new Vector2(-overlap.Width - 1, 0);
+                    }
+                }
+            }
+        }
+        public void UpdateEnemy()
+        {
+            foreach (Enemy enemy in enemylist)
             {
-                //difference = player.Position.X - ee.Position.X;
-                //if (difference > 850)
-                //{ 
-                    ee.Position += ee.Velocity;
+                //if (enemy.Position.X < 0)
+                //{
+                //    enemy.isVisible = false;
+                //}
+                //for (int i = 0; i < enemylist.Count; i++)
+                //{
+                //    if (!enemylist[i].isVisible)
+                //    {
+                //        enemylist.RemoveAt(i);
+                //        i--;
+                //        EnemyCount--;
+                //    }
                 //}
             }
-          //  Debug.WriteLine(EnemyCount);
-           
         }
-        
         Random enemyrandom = new Random();
         private List<Enemy> CreateEnemies(int enemyCount)
         {
@@ -104,41 +167,47 @@ namespace BeeSouls
             
             for (int i = 0; i < 3; i++)
             {
-                ////ground enemies
-                //if (enemyhitbox.Intersects(enemyhitbox))//snake
-                //{
-                   _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 20, new Vector2(0, 0)));
+                if(SnakeCount < 5)
+                { 
+                   _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(enemyrandom.Next(200, 2800), 888), 20, new Vector2(-1, 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[0].Width, _texturesGround[0].Height);
-                //}
+                    EnemyCount++;
+                    SnakeCount++;
+                }
 
-                //if (enemyhitbox.Intersects(enemyhitbox))//spider
-                //{
-                   _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[1], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 25, new Vector2(0, 0)));
+                if(SpiderCount < 5)
+                { 
+                    _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[2], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 25, new Vector2(-1, 0)));
                    enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[1].Width, _texturesGround[1].Height);
-                //    //Debug.WriteLine("ny enemy spawnades");
-                //}
-
-                //if (enemyhitbox.Intersects(enemyhitbox))//snail
-                //{
-                    _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[2], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 10, new Vector2(0, 0)));
+                    EnemyCount++;
+                    SpiderCount++;
+                }
+                if(SnailCount < 5)
+                { 
+                    _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[1], 20, new Vector2(enemyrandom.Next(200, 2800), 872), 10, new Vector2(-1, 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[3].Width, _texturesGround[2].Height);
-                //}
+                    EnemyCount++;
+                    SnailCount++;
+                }
 
-                //if (enemyhitbox.Intersects(enemyhitbox))//worm
-                //{
-                   _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 10, new Vector2(0, 0)));
+                if(WormCount < 5)
+                { 
+                    _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(enemyrandom.Next(200, 2800), 889), 10, new Vector2(-1, 0)));
                    enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[3].Width, _texturesGround[3].Height);
-                //}
+                    EnemyCount++;
+                    WormCount++;
+                }
 
-                ////air enemies
-                //if (enemyhitbox.Intersects(enemyhitbox))
-                //{
-                    _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(enemyrandom.Next(200, 2800), enemyrandom.Next(0, 865)), 20, new Vector2(0, 0)));
+                if(FlyCount <= 5)
+                {
+                    _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(enemyrandom.Next(200, 2800), enemyrandom.Next(0, 865)), 20, new Vector2(-1, 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesAir[0].Width, _texturesAir[0].Height);
-                //}
+                    EnemyCount++;
+                    FlyCount++;
+                }
             }
 
-            return _enemyList;
+            return _enemyList;   
         }
         
         public void Draw(SpriteBatch spritebatch)
