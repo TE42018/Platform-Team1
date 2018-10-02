@@ -15,13 +15,12 @@ namespace BeeSouls
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
         Player player;
         PlayerAttack bullet;
-        BossBullet bossBullet;
+        
 
         EnemyManager enemyManager;
-        Boss boss;
+        static Boss boss;
 
         static TileEngine tileEngine;
 
@@ -99,6 +98,8 @@ namespace BeeSouls
 
         public static void LoadNextMAp()
         {
+            boss.HasSpawned = true;
+           
             tileEngine.MapData = new int[,]
             {   {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11},
                 {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11},

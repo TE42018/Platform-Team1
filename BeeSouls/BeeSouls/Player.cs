@@ -80,8 +80,10 @@ namespace BeeSouls
 
             if (data.Tile == 3)
             {
+
                 BeeSoulsGame.LoadNextMAp();
                 Position = new Vector2(50, 50);
+
             }
 
             //if (overlap.Width > overlap.Height)
@@ -151,6 +153,12 @@ namespace BeeSouls
                     {
                        bullets.RemoveAt(j);
                        EnemyManager.enemylist.RemoveAt(i);
+                    }
+                    if (b.Hitbox.Intersects(Boss.bossHitBox))
+                    {
+                        Boss.bossHealth -= 2;
+                        bullets.RemoveAt(j);
+
                     }
                 }
             }

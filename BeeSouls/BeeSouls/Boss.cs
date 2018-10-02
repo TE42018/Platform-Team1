@@ -20,16 +20,20 @@ namespace BeeSouls
         public static List<BossBullet> bossBullets = new List<BossBullet>();
         float bulletTimer = 1000f;
         public Rectangle bbHitbox;
-        
+        public static int bossHealth = 100;
+        bool isDead;
+        public bool HasSpawned {get; set;}
 
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public int bossDirection = 1;
         public Boss(Game game) : base(game)
         {
-            Position =  new Vector2(300, 200);
+            
+            Position = new Vector2(600, 500);
         }
 
+        
 
         protected override void LoadContent()
         {
@@ -43,6 +47,9 @@ namespace BeeSouls
 
         public override void Update(GameTime gameTime)
         {
+            if (!HasSpawned)
+                return;
+
             Vector2 playerPos = new Vector2(Player.xPos, Player.yPos);
             Vector2 direction = Vector2.Normalize(playerPos - Position);
             Velocity = direction * Speed;
@@ -66,7 +73,19 @@ namespace BeeSouls
                 Console.WriteLine(bulletTimer);
                 bossBullets.Add(new BossBullet(Position, playerPos));
             }
-              
+
+
+
+            if (bossHealth <= 0)
+            {
+                isDead = true;
+            }
+
+            if(isDead == true)
+            {
+                Console.WriteLine("nu e bossen dö");
+            }
+
             currentTexture = bossLeftTexture;
             foreach (var b in bossBullets)
                 b.Update(gameTime);
@@ -76,7 +95,10 @@ namespace BeeSouls
        
 
         public void Draw(SpriteBatch spriteBatch)
-        {    
+        {
+            if (!HasSpawned)
+                return;
+
             spriteBatch.Draw(currentTexture, new Rectangle((int)(Position.X + TileEngine.CameraOffset.X), (int)(Position.Y + TileEngine.CameraOffset.Y), currentTexture.Width, currentTexture.Height), Color.White);
             foreach (var b in bossBullets)
                 b.Draw(spriteBatch);
