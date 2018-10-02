@@ -58,7 +58,8 @@ namespace BeeSouls
 
         float timeSinceLastSprite = 0f;
         private float attackCounter = 0f;
-
+        private GamePadState _currentGamepadState;
+        private GamePadState _prevGamepadState;
         public KeyboardState currKeyboardState;
         public KeyboardState prevKeyboardState;
         private Vector2 _position;
@@ -307,7 +308,62 @@ namespace BeeSouls
             {
                 IsDead = false;
             }
+            GamePadCapabilities c = GamePad.GetCapabilities(PlayerIndex.One);
+            if (c.IsConnected)
+            {
+                _currentGamepadState = GamePad.GetState(PlayerIndex.One, GamePadDeadZone.None);
+                if (c.HasLeftXThumbStick)
+                {
+                    if (_currentGamepadState.ThumbSticks.Left.X < -0.5f)
+                    {
+                        Position += new Vector2(-5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = -1;
+                    }
 
+                    if (_currentGamepadState.ThumbSticks.Left.X > 0.5f)
+                    {
+                        Position += new Vector2(5.0f, 0);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "width");
+                        direction = 1;
+                    }
+                    if (_currentGamepadState.ThumbSticks.Left.Y < -0.5f)
+                    {
+                        Position += new Vector2(0, 5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+
+                    if (_currentGamepadState.ThumbSticks.Left.Y > 0.5f)
+                    {
+                        Position += new Vector2(0, -5.0f);
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(PlayerHitBox), "height");
+
+                    }
+                }
+
+                if (c.GamePadType == GamePadType.GamePad)
+                {
+                    if (_currentGamepadState.IsButtonDown(Buttons.Back))
+                    {
+                        BeeSoulsGame g = this.Game as BeeSoulsGame;
+                        g.Exit();
+                    }
+
+                    if (_currentGamepadState.IsButtonDown(Buttons.A) && _prevGamepadState.IsButtonUp(Buttons.A))
+                    {
+                        var bullet = new Bullet(this.Game);
+                        bullet.Velocity = new Vector2(direction, 0) * 8;
+                        bullet.Position = Position;
+                        bullets.Add(bullet);
+
+
+                    }
+
+
+
+                }
+            }
 
             base.Update(gameTime);
         }
