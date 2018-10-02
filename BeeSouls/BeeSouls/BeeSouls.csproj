@@ -49,6 +49,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="EnemyShot.cs" />
+    <Compile Include="EnemyShotManager.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="IMovingObjects.cs" />
     <Compile Include="Player.cs" />

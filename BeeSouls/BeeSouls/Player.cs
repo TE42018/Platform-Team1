@@ -144,6 +144,8 @@ namespace BeeSouls
                 {
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
+                    EnemyManager.EnemyCount--;
+                   
                 }
 
                 for (int j = 0; j < bullets.Count; j++)
@@ -206,9 +208,8 @@ namespace BeeSouls
                 bullet.Position = Position;
                 bullets.Add(bullet);
             }
-
-
-
+            yPos = Position.Y;
+            xPos = Position.X;
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
             if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
             {
