@@ -45,6 +45,7 @@ namespace BeeSouls
         private int playerHealth = 10;
         private Rectangle playerHitBox;
         public Rectangle bHitbox;
+        public Rectangle bbHitbox;
 
         public Rectangle PlayerHitBox
         {
@@ -62,6 +63,7 @@ namespace BeeSouls
         private KeyboardState prevKeyboardState;
         private Vector2 _position;
         List<Bullet> bullets = new List<Bullet>();
+        List<BossBullet> bBullets = new List<BossBullet>();
 
         public Player(Game game) : base(game)
         {
@@ -123,6 +125,7 @@ namespace BeeSouls
             var bullet = new Bullet(this.Game);
             bulletHitBox = new Rectangle((int)bullet.Position.X, (int)bullet.Position.Y, Bullet.Texture.Width, Bullet.Texture.Height);
 
+          
             xPos = Position.X;
             yPos = Position.Y;
 
@@ -152,13 +155,30 @@ namespace BeeSouls
                 }
             }
 
+            bBullets = Boss.bossBullets;
+            for (int l = 0; l <bBullets.Count; l++)
+            {
+                BossBullet b = bBullets[l];
+
+                if (b.Hitbox.Intersects(playerHitBox)) 
+                { 
+                    IsPlayerHit = true;
+                }
+            }
+
             var bossBox = Boss.bossHitBox;
+            
 
             if (playerHitBox.Intersects(bossBox))
             {
-                Console.WriteLine("här är bossen");
+                IsPlayerHit = true;
             }
 
+
+            if (IsPlayerHit)
+            {
+                playerHealth -= 10;
+            }
 
             foreach (var b in bullets)
                 b.Update(gameTime);

@@ -17,7 +17,7 @@ namespace BeeSouls
         Texture2D bossRightTexture;
         private int Speed = 2;
         public static Rectangle bossHitBox;
-        List<BossBullet> bossBullets = new List<BossBullet>();
+        public static List<BossBullet> bossBullets = new List<BossBullet>();
         float bulletTimer = 1000f;
         public Rectangle bbHitbox;
         
