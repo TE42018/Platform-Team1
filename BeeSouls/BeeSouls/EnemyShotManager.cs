@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -44,8 +44,7 @@ namespace BeeSouls
                     shoot = 0;
                     EnemyShootBullets();
                     currentbulletcount++;
-                    Console.WriteLine("Shoot");
-                    Console.WriteLine(currentbulletcount);
+                   
                 }
                 UpdateBullet();
             }

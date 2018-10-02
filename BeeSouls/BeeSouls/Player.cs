@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -50,7 +50,8 @@ namespace BeeSouls
             get { return playerHitBox; }
         }
 
-
+        public static float xPos;
+        public static float yPos;
         bool IsPlayerHit = false;
 
         float timeSinceLastSprite = 0f;
@@ -129,6 +130,7 @@ namespace BeeSouls
                     IsPlayerHit = true;
                     EnemyManager.enemylist.RemoveAt(i);
                     EnemyManager.EnemyCount--;
+                   
                 }
             }
 
@@ -159,7 +161,8 @@ namespace BeeSouls
                 bullet.Position = Position;
                 bullets.Add(bullet);
             }
-
+            yPos = Position.Y;
+            xPos = Position.X;
             //Console.WriteLine(Math.Sin(gameTime.TotalGameTime.TotalSeconds));
             if (Math.Sin(wingFlapMult * gameTime.TotalGameTime.TotalSeconds) < 0 && IsDead == false) //Flying
             {

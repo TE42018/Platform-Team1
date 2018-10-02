@@ -21,26 +21,27 @@ namespace BeeSouls
         private float difference;
         private int SnakeCount, SnailCount, SpiderCount, WormCount, FlyCount;
         private Rectangle SnakeHitBox, SnailHitBox, SpiderHitBox, WormHitBox, FlyHitBox, enemyhitbox;
-       
-        public Rectangle flyHitBox 
+
+        public Rectangle flyHitBox
         {
             get { return FlyHitBox; }
-        } 
+        }
 
         private List<Texture2D> _texturesGround;
         private List<Texture2D> _texturesAir;
-        
+
         public static List<Enemy> enemylist = new List<Enemy>();
         public EnemyManager(ContentManager content)
         {
             EnemyCount = 0;
             MaxEnemies = 15;
-            
-            
+
+
             SpawnInterval = 2500;
         }
         public void Loadcontent(ContentManager Content)
         {
+            SnakeCount = 0; SnailCount = 0; SpiderCount = 0;WormCount = 0; FlyCount = 0;
             _texturesGround = new List<Texture2D>()
             {
             Content.Load<Texture2D>("enemy/snake"),
@@ -48,9 +49,9 @@ namespace BeeSouls
             Content.Load<Texture2D>("enemy/spider"),
             Content.Load<Texture2D>("enemy/worm"),
             };
-            
+
             _texturesAir = new List<Texture2D>()
-            { 
+            {
             Content.Load<Texture2D>("enemy/fly"),
             };
             enemylist = CreateEnemies(EnemyCount);
@@ -59,49 +60,62 @@ namespace BeeSouls
         {
 
             Texture2D CurrentSnakeTexture = _texturesGround[1];
-          //  SnakeHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+            //  SnakeHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentSnailTexture = _texturesGround[1];
-          //  SnailHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+            //  SnailHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentSpiderTexture = _texturesGround[1];
-          //  SpiderHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+            //  SpiderHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentWormTexture = _texturesGround[1];
-          //  WormHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+            //  WormHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
 
             Texture2D CurrentFlyTexture = _texturesAir[0];
-          //  FlyHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
+            //  FlyHitBox = new Rectangle((int)Position.X, (int)Position.Y, CurrentSnakeTexture.Width, CurrentSnakeTexture.Height);
             // lägg till tid på spawncounter
             SpawnCounter += gameTime.ElapsedGameTime.Milliseconds;
-            
+
             //Kolla om spawncounter >= spawninterval
             //Om det är det, spawna en fiende och sätt spawncounter till noll
-            if (SpawnCounter >= SpawnInterval && EnemyCount < MaxEnemies)     
+            if (SpawnCounter >= SpawnInterval && EnemyCount < MaxEnemies)
             {
 
                 CreateEnemies(EnemyCount);
-                    
-                  
+
+                //player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
             }
             for (int j = 0; j < enemylist.Count; j++)
+            {
+                Enemy e = enemylist[j];
+                difference = Math.Abs(Player.xPos - e.Position.X);
+
+                if (difference < 850)
                 {
-                    
-                    //difference = ppos - enemylist[j].Position.X;
-                    //Console.WriteLine("P: "  + ppos);
-                    //Console.WriteLine("E: " + enemylist[j].Position.X);
-                    //if (difference < 200)
-                    //{
-                    if(enemylist[j].Position.X < Player.xpos)
-                    { 
-                        enemylist[j].Position -= enemylist[j].Velocity;
+                    if (e.Type == EnemyType.fly)
+                    {
+
+                        Vector2 playerPos = new Vector2(Player.xPos, Player.yPos);
+                        Vector2 direction = Vector2.Normalize(playerPos - e.Position);
+                        e.Velocity = direction * e.speed;
+                       
+                        e.Position += e.Velocity;
+                       
+                    }
+                    else if (e.Position.X < Player.xPos)
+                    {
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(e.Hitbox), "height");
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(e.Hitbox), "width");
+                        e.Position -= e.Velocity;
                     }
                     else
                     {
-                    enemylist[j].Position += enemylist[j].Velocity;
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(e.Hitbox), "height");
+                        Collide(BeeSoulsGame.tileEngine.CheckCollision(e.Hitbox), "width");
+                        e.Position += e.Velocity;
                     }
-                //    Console.WriteLine("difference is " + difference);
-                //}
+                    //    Console.WriteLine("difference is " + difference);
+                }
             }
             UpdateEnemy();
 
@@ -111,8 +125,8 @@ namespace BeeSouls
         public void Collide(CollisionData data, string direction)
         {
             Rectangle overlap = data.Area;
-            foreach(Enemy e in enemylist)
-            { 
+            foreach (Enemy e in enemylist)
+            {
                 if (overlap == Rectangle.Empty)
                 {
                     return;
@@ -171,26 +185,26 @@ namespace BeeSouls
             List<Enemy> _enemyList = new List<Enemy>();
 
             //_enemylist.Add(new Enemy(EnemyType.bat, _textures[enemyrandom.Next(0, 5)], 20, new Vector2(enemyrandom.Next(0, 200), enemyrandom.Next(0, 200))));
-            
-            for (int i = 0; i < 3; i++)
+
+            for (int i = 0; i < 5; i++)
             {
-                if(SnakeCount < 5)
-                { 
-                   _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(enemyrandom.Next(200, 2800), 888), 20, new Vector2(enemyrandom.Next(-4,-1), 0)));
+                if (SnakeCount < 5)
+                {
+                    _enemyList.Add(new Enemy(EnemyType.snake, _texturesGround[0], 20, new Vector2(enemyrandom.Next(200, 2800), 888), 20, new Vector2(enemyrandom.Next(-4, -1), 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[0].Width, _texturesGround[0].Height);
                     EnemyCount++;
                     SnakeCount++;
                 }
 
-                if(SpiderCount < 5)
-                { 
+                if (SpiderCount < 5)
+                {
                     _enemyList.Add(new Enemy(EnemyType.spider, _texturesGround[2], 20, new Vector2(enemyrandom.Next(200, 2800), 865), 25, new Vector2(enemyrandom.Next(-4, -1), 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[2].Width, _texturesGround[2].Height);
                     EnemyCount++;
                     SpiderCount++;
                 }
-                if(SnailCount < 5)
-                { 
+                if (SnailCount < 5)
+                {
                     _enemyList.Add(new Enemy(EnemyType.snail, _texturesGround[1], 20, new Vector2(enemyrandom.Next(200, 2800), 872), 10, new Vector2(enemyrandom.Next(-4, -1), 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[1].Width, _texturesGround[1].Height);
                     EnemyCount++;
@@ -198,25 +212,26 @@ namespace BeeSouls
                 }
 
                 if (WormCount < 5)
-                { 
+                {
                     _enemyList.Add(new Enemy(EnemyType.worm, _texturesGround[3], 20, new Vector2(enemyrandom.Next(200, 2800), 889), 10, new Vector2(enemyrandom.Next(-4, -1), 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesGround[3].Width, _texturesGround[3].Height);
                     EnemyCount++;
                     WormCount++;
                 }
 
-                if(FlyCount <= 5)
+                if (FlyCount < 5)
                 {
                     _enemyList.Add(new Enemy(EnemyType.fly, _texturesAir[enemyrandom.Next(0, 1)], 20, new Vector2(enemyrandom.Next(200, 2800), enemyrandom.Next(0, 865)), 20, new Vector2(enemyrandom.Next(-5, -1), 0)));
                     enemyhitbox = new Rectangle((int)Position.X, (int)Position.Y, _texturesAir[0].Width, _texturesAir[0].Height);
                     EnemyCount++;
                     FlyCount++;
                 }
+               
             }
 
-            return _enemyList;   
+            return _enemyList;
         }
-        
+
         public void Draw(SpriteBatch spritebatch)
         {
             foreach (Enemy e in enemylist)

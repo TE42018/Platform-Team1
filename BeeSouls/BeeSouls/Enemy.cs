@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,8 @@ namespace BeeSouls
         public Texture2D EnemyGraphics{ get; set; }
         public int Points { get; set; }
         public Rectangle Hitbox { get; set; }
-        
+        public int speed = 4;
+
         public Enemy(EnemyType type, Texture2D enemyGraphics, int EnemyDamage, Vector2 _Position, int Points, Vector2 _Velocity)
         {
             Type = type;
