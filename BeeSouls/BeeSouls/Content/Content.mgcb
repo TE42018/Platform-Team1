@@ -529,6 +529,7 @@
 /processorParam:TextureFormat=Color
 /build:TileMap.png
 
+<<<<<<< HEAD
 #begin bee_attackLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -576,4 +577,17 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:boss/bulletboi.png
+=======
+#begin song.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:song.mp3
+
+#begin BeeSound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:BeeSound.mp3
+>>>>>>> develop
 

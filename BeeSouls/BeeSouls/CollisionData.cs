@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace BeeSouls
 {
-    class CollisionData
+    public class CollisionData
     {
         public int Tile { get; set; }
         public Rectangle Area { get; set; }

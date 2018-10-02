@@ -1,10 +1,11 @@
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace BeeSouls
 {
@@ -21,12 +22,12 @@ namespace BeeSouls
 
         EnemyManager enemyManager;
         static Boss boss;
-
-        static TileEngine tileEngine;
+        public static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
         KeyboardState ks;
         Color col;
+
 
         const byte MENU = 0, PLAYGAME = 1, GAMEOVER = 2, HIGHSCORE = 3, OPTIONS = 4, EXIT = 5;
         int CurrentScreen = MENU;
@@ -36,6 +37,12 @@ namespace BeeSouls
         Button playGameButton, optionsButton, highscoreButton, exitButton;
         float screenwidth, screenheight;
         Texture2D bgimage;
+        // music 
+        public Song song;
+            SoundEffect effect;
+            SoundEffectInstance effectInstance;
+
+
 
         public BeeSoulsGame()
         {
@@ -48,6 +55,7 @@ namespace BeeSouls
             graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
             graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
             //graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+
         }
 
         /// <summary>
@@ -135,6 +143,14 @@ namespace BeeSouls
             exitText = Content.Load<Texture2D>("exit");
             bgimage = Content.Load<Texture2D>("main menu");
 
+            //music
+            effect = Content.Load<SoundEffect>("BeeSound");
+            effectInstance = effect.CreateInstance();
+            song = Content.Load<Song>("song");
+            effectInstance.Volume = 0.5f;
+
+
+
             exitButton = new Button(new Rectangle(300, 400, exitText.Width, exitText.Height), true);
             exitButton.load(Content, "exit");
             highscoreButton = new Button(new Rectangle(300, 300, highscoreText.Width, highscoreText.Height), true);
@@ -178,16 +194,24 @@ namespace BeeSouls
             KeyboardState state = Keyboard.GetState();
 
 
-            switch (CurrentScreen)
+            Console.WriteLine(player.Velocity.Length());
+
+
+
+                switch (CurrentScreen)
             {
                 case MENU:
                     //What we want to happen in the MENU screen goes in here.
                     //GO TO PLAYGAME SCREEN
+
                     if (playGameButton.update(new Vector2(mouseState.X, mouseState.Y)) == true &&
                         mouseState != previousMouseState && mouseState.LeftButton == ButtonState.Pressed)
                     {
                         CurrentScreen = PLAYGAME;
                         tileEngine.CameraPosition = new Vector2(player.Position.X, player.Position.Y);
+                        MediaPlayer.Play(song);
+                        MediaPlayer.IsRepeating = true;
+                        MediaPlayer.Volume = 0.5f;
 
                     }
                     else
@@ -247,39 +271,92 @@ namespace BeeSouls
                     enemyManager.Update(gameTime);
                     player.Update(gameTime);
                     bullet.Update(gameTime);
+
+                    if (state.IsKeyDown(Keys.Down))
                     boss.Update(gameTime);
-                    if (Player.IsDead == false )
                     {
-                        if (state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.S))
-                        {
-                            player.Position += new Vector2(0, 5.0f);
-                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
-                        }
-                        if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.W))
-                        {
-                            player.Position += new Vector2(0, -5.0f);
-                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
-                        }
-                        if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                        {
-                            player.Position += new Vector2(-5.0f, 0);
-                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
-                            player.direction = -1;
-                        }
-                        if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                        {
-                            player.Position += new Vector2(5.0f, 0);
-                            player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
-                            player.direction = 1;
-                        }
+                        player.Position += new Vector2(0, 5.0f);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+
+
+                    }
+
+                        if (state.IsKeyDown(Keys.Up))
+                    else
+                    {
+                        player.Position += new Vector2(0, -5.0f);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "height");
+
+                        Console.WriteLine("Man kan inte gï¿½ nï¿½r man e dï¿½d");
+                    }
+
+                    if (state.IsKeyDown(Keys.Left))
+                    {
+                        player.Position += new Vector2(-5.0f, 0);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                        player.direction = -1;
+                    }
+
+                    if (state.IsKeyDown(Keys.Right))
+                    {
+                        player.Position += new Vector2(5.0f, 0);
+                        player.Collide(tileEngine.CheckCollision(player.PlayerHitBox), "width");
+                        player.direction = 1;
+                       
+                    }
+
+                    if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.Down) || state.IsKeyDown(Keys.Left) ||
+                        state.IsKeyDown(Keys.Right))
+                    {
+                        if (effectInstance.State == SoundState.Stopped)
+                            effectInstance.Play();
                     }
                     else
                     {
-                        Console.WriteLine("Man kan inte gå när man e död");
+                        effectInstance.Stop();
                     }
 
-                    var min = new Vector2(400, 240);
-                    var max = new Vector2(2940, 1050);
+                    if (player.currKeyboardState.IsKeyDown(Keys.K) && player.prevKeyboardState.IsKeyUp(Keys.K))
+                    {
+                        effectInstance.Volume += 0.1f;
+                    }
+                    else if (player.currKeyboardState.IsKeyDown(Keys.J) && player.prevKeyboardState.IsKeyUp(Keys.J))
+
+                    {
+                        effectInstance.Volume -= 0.1f;
+                    }
+                    else if (effectInstance.Volume >= 0.9f)
+                    {
+                        effectInstance.Volume = 0.9f;
+                    }
+                    else if (effectInstance.Volume <= 0.1f)
+                    {
+                        effectInstance.Volume = 0.1f;
+                    }
+
+                    if (player.currKeyboardState.IsKeyDown(Keys.I) && player.prevKeyboardState.IsKeyUp(Keys.I))
+                    {
+                        MediaPlayer.Volume += 0.1f;
+                    }
+                    else if (player.currKeyboardState.IsKeyDown(Keys.O) && player.prevKeyboardState.IsKeyUp(Keys.O))
+
+                    {
+                        MediaPlayer.Volume -= 0.1f;
+                    }
+                    else if (MediaPlayer.Volume >= 1.0f)
+                    {
+                        MediaPlayer.Volume = 1.0f;
+                    }
+                    else if (MediaPlayer.Volume <= 0.0f)
+                    {
+                        MediaPlayer.Volume = 0.0f;
+                    }
+
+
+                    int screenCenterX = tileEngine.viewportWidth / 2;
+                    int screenCenterY = tileEngine.viewportHeight / 2;
+                    var min = new Vector2(screenCenterX, screenCenterY);
+                    var max = new Vector2(tileEngine.MapData.GetLength(1) * tileEngine.TileWidth, tileEngine.MapData.GetLength(0) * tileEngine.TileHeight);
                     player.Position = Vector2.Clamp(player.Position, Vector2.Zero, new Vector2(max.X - player.PlayerHitBox.Width, max.Y - player.PlayerHitBox.Height));
                    // Console.WriteLine(tileEngine.GetHitboxes(player.PlayerHitBox).Count);
                     //What we want to happen when we play our GAME goes in here.
