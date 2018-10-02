@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -42,7 +42,7 @@ namespace BeeSouls
 
         public int direction = 1;
         private int wingFlapMult = 35;
-        private int playerHealth = 10;
+        private int playerHealth = 100000;
         private Rectangle playerHitBox;
         public Rectangle bHitbox;
         public Rectangle bbHitbox;
