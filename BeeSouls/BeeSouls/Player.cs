@@ -353,7 +353,7 @@ namespace BeeSouls
 
                     if (_currentGamepadState.IsButtonDown(Buttons.A) && _prevGamepadState.IsButtonUp(Buttons.A))
                     {
-                        var bullet = new Bullet(this.Game);
+                        
                         bullet.Velocity = new Vector2(direction, 0) * 8;
                         bullet.Position = Position;
                         bullets.Add(bullet);
