@@ -18,6 +18,7 @@ namespace BeeSouls
 
         Player player;
         PlayerAttack bullet;
+        BossBullet bossBullet;
 
         EnemyManager enemyManager;
         Boss boss;
@@ -88,7 +89,7 @@ namespace BeeSouls
 
             bullet = new PlayerAttack(this);
             Components.Add(bullet);
-          
+
             base.Initialize();
         }
         internal void ChangeState(MenuState menuState)
@@ -145,6 +146,10 @@ namespace BeeSouls
             playGameButton.load(Content, "btnPlay");
 
             Bullet.Texture = Content.Load<Texture2D>("player/playerShot");
+            BossBullet.BossBulletTexture = Content.Load<Texture2D>("boss/bulletboi");
+
+            //bossBullet = new BossBullet(this);
+            //Components.Add(bossBullet);
 
             base.LoadContent();
         }

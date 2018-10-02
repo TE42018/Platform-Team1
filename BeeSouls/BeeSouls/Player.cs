@@ -52,7 +52,7 @@ namespace BeeSouls
         }
 
         public static float xPos;
-
+        public static float yPos;
         bool IsPlayerHit = false;
 
         float timeSinceLastSprite = 0f;
@@ -124,6 +124,7 @@ namespace BeeSouls
             bulletHitBox = new Rectangle((int)bullet.Position.X, (int)bullet.Position.Y, Bullet.Texture.Width, Bullet.Texture.Height);
 
             xPos = Position.X;
+            yPos = Position.Y;
 
             for (int i = 0; i < EnemyManager.enemylist.Count; i++)
             {

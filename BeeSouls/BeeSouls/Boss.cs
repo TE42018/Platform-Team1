@@ -15,9 +15,12 @@ namespace BeeSouls
         Texture2D currentTexture;
         Texture2D bossLeftTexture;
         Texture2D bossRightTexture;
+        private int Speed = 2;
         public static Rectangle bossHitBox;
-        List<Bullet> bossBullets = new List<Bullet>();
-        float bulletTimer = 1000f; 
+        List<BossBullet> bossBullets = new List<BossBullet>();
+        float bulletTimer = 1000f;
+        public Rectangle bbHitbox;
+        
 
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
@@ -37,31 +40,33 @@ namespace BeeSouls
             base.LoadContent();
         }
 
+
         public override void Update(GameTime gameTime)
         {
+            Vector2 playerPos = new Vector2(Player.xPos, Player.yPos);
+            Vector2 direction = Vector2.Normalize(playerPos - Position);
+            Velocity = direction * Speed;
             bossHitBox = new Rectangle((int)Position.X, (int)Position.Y, currentTexture.Width, currentTexture.Height);
             Position += Velocity;
             var origin = new Vector2(currentTexture.Width / 2f, currentTexture.Height / 2f);
-            var bullet = new Bullet(this.Game);
+            var bullet = new BossBullet(Vector2.Zero, Vector2.Zero);
             bulletTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            var bulletHitBox = bbHitbox;
+            bulletHitBox = new Rectangle((int)bullet.Position.X, (int)bullet.Position.Y, BossBullet.BossBulletTexture.Width, BossBullet.BossBulletTexture.Height);
 
-            if (Position.X > Player.xPos)
-            {
-                Velocity = new Vector2(-2f, 0);
-            }
-            else if (Position.X < Player.xPos)
-            {
-                Velocity = new Vector2(2f, 0);
-            }
+            var target = new Vector2(Player.xPos, Player.yPos);
+            var bulletOrigin = new Vector2(Position.X, Position.Y);
+           
+            
 
             if (bulletTimer <= 0f)
             {
-                bullet.Velocity = new Vector2(bossDirection, 0) * 8;
-                bullet.Position = Position;
-                bossBullets.Add(bullet);
-                bulletTimer = 500;
+                bulletTimer = 1200 - (int)gameTime.TotalGameTime.TotalSeconds * 20;
+                bulletTimer = Math.Max(bulletTimer, 333);
+                Console.WriteLine(bulletTimer);
+                bossBullets.Add(new BossBullet(Position, playerPos));
             }
-
+              
             currentTexture = bossLeftTexture;
             foreach (var b in bossBullets)
                 b.Update(gameTime);
