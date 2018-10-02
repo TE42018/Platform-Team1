@@ -21,7 +21,7 @@ namespace BeeSouls
 
         EnemyManager enemyManager;
         EnemyShotManager enemyShotManager;
-        static TileEngine tileEngine;
+        public static TileEngine tileEngine;
 
         MouseState mouseState, previousMouseState;
         KeyboardState ks;
